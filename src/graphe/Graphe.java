@@ -262,7 +262,7 @@ public class Graphe {
         Graphe gMult = new Graphe(matTemp);
         for(int i = 0 ; i < gMult.matrice.length;i++){
             for(int j=  0 ; j< gMult.matrice[0].length;j++){
-                gMult.matrice[i][j] = this.multAdd(graphe,i,j);
+                gMult.matrice[i][j] = this.multAdd(graphe,i,j); //appelle de la méthode de produit vectoriel.
             }
         }
         return gMult;
@@ -289,7 +289,7 @@ public class Graphe {
     public int multAdd(Graphe graphe, int ligne,int col){
         int result = 0;
         for(int i = 0 ; i < this.matrice[ligne].length;i++){
-            result += (this.matrice[ligne][i]*graphe.matrice[i][col]);
+            result += (this.matrice[ligne][i]*graphe.matrice[i][col]);// on fait la somme des produits de l'élément i de la ligne de la matrice multipliée par l'élément i de la colone de la matrice multiplicatrice.
         }
         return result;
     }
