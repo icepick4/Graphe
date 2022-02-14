@@ -34,13 +34,17 @@ public class Graphe {
     
     public String type(){
         int p = this.pGraphe();
+        String check = "";
+        if(!(this.estSymetrique())){
+            check = "non-";
+        }
         if (this.estSimple()){
-            return "Ce graphe est simple";
+            return "Ce graphe est simple et "+check+"orienté";
         }
         else if(this.estElementaire()){
-            return "Ce graphe est un "+p+"-graphe élémentaire";
+            return "Ce graphe est un "+p+"-graphe élémentaire"+check+"orienté";
         }
-        return "Ce graphe est un "+p+"graphe";
+        return "Ce graphe est un "+p+"graphe"+check+"orienté";
     }
     
     public int pGraphe(){
@@ -197,7 +201,7 @@ public class Graphe {
     public boolean estComplet(){
         for(int i = 0; i < this.matrice.length; i++){
             for(int j = 0; j < this.matrice.length; j++){
-                if(i != j && this.matrice[i][j] == 0){
+                if(i != j && this.matrice[i][j] != 1){
                     return false;
                 }
             }
@@ -205,6 +209,34 @@ public class Graphe {
         return true;
     } 
     
+    public int nombreClique(){
+        if(!(this.estSimple())){
+            return 0;
+        }
+        int maxClique = 0;
+        int[] clique = new int[this.ordre()];
+        if(this.estSymetrique()){
+            for(int i = 0; i < this.ordre(); i++){    
+                int []suivants = this.suivants(i);
+                for(int j = 0; j < suivants.length; j++){
+                    /*if (this.suivants(suivants[j]) < i){
+                        
+                    }*/
+                
+                    return nombreClique();
+                }
+                
+            }
+        
+        }
+        else{
+            //voir  remarque chap 1 page 13
+        }
+        
+        
+        return maxClique;
+    }
+    @Override
     public String toString(){
         return "Nombre de sommets : "+this.ordre()+"\nNombre d'arc(s)/arrête(s) : "+this.taille()+
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();

@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package graphe;
-
 /**
  *
  * @author Remi
@@ -15,18 +14,24 @@ public class GrapheApp {
      */
     public static void main(String[] args) {
         int [][] matrice = {
-                           {0,1,1},
-                           {1,0,1},
-                           {1,4,0}
+                           {0,1,1,1,0,0},
+                           {1,0,1,1,0,0},
+                           {1,1,0,1,1,1},
+                           {1,1,1,0,1,0},
+                           {0,0,1,1,0,1},
+                           {0,0,1,0,1,0}
                           };
         Graphe graphe1 = new Graphe(matrice);
         System.out.println(graphe1.type());
-        afficherListe(graphe1.degre(2));
+        /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
         afficherListe(graphe1.precedents(0));
         afficherListeDegres(graphe1);
         System.out.println(graphe1.estComplet());
-        System.out.println(graphe1);    
+        System.out.println(graphe1); */
+        afficherListe(graphe1.suivants(0));
+        afficherListe(graphe1.precedents(0));
+        System.out.println(graphe1);
     }
     public static void afficherListe(int[] tab){
         System.out.print("[");
@@ -67,10 +72,7 @@ public class GrapheApp {
                                 }
                         System.out.println();
                 }
-            }
-            
+            } 
         }
     }
-    
-    
 }
