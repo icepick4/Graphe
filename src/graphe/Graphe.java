@@ -227,6 +227,7 @@ public class Graphe {
         gComplem = this.sousMat(this.versComplet());
         return gComplem;
     }
+
     public Graphe sousMat(Graphe graphe){
         if (this.ordre() != graphe.ordre()){
             return null;
@@ -239,5 +240,49 @@ public class Graphe {
             }
         }
         return gSoustrait;
+    }
+    public Graphe addMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre()){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gSoustrait = new Graphe(matTemp);
+        for(int i = 0 ; i < this.matrice.length;i++){
+            for (int j = 0 ; j < this.matrice.length;j++){
+                gSoustrait.matrice[i][j]= this.matrice[i][j] + graphe.matrice[i][j];
+            }
+        }
+        return gSoustrait;
+    }
+    public Graphe multMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre() || this.matrice[0].length != graphe.matrice.length){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][graphe.matrice[0].length];
+        Graphe gMult = new Graphe(matTemp);
+        for(int i = 0 ; i < gMult.matrice.length;i++){
+            for(int j=  0 ; j< gMult.matrice[0].length;j++){
+                gMult.matrice[i][j] = this.multAdd(graphe,i,j);
+            }
+        }
+        return gMult;
+    }
+    public Graphe multMat(int coeff){
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gMult = new Graphe(matTemp);
+        for(int i = 0 ; i < gMult.matrice.length;i++){
+            for(int j=  0 ; j< gMult.matrice[0].length;j++){
+                gMult.matrice[i][j] *= coeff;
+            }
+        }
+        return gMult;
+
+    }
+    public int multAdd(Graphe graphe, int ligne,int col){
+        int result = 0;
+        for(int i = 0 ; i < this.matrice[ligne].length;i++){
+            result += (this.matrice[ligne][i]*graphe.matrice[i][col]);
+        }
+        return result;
     }
 }
