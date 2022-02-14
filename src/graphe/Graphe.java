@@ -276,8 +276,16 @@ public class Graphe {
             }
         }
         return gMult;
-
-    }
+        }
+    /**
+     * 
+     *fonction du calcul de produit vectoriel à une position donnée de la matrice résultante.
+     * 
+     * @param graphe
+     * @param ligne
+     * @param col
+     * @return le résultat du produit vectoriel à une position donnée.
+     */
     public int multAdd(Graphe graphe, int ligne,int col){
         int result = 0;
         for(int i = 0 ; i < this.matrice[ligne].length;i++){
