@@ -209,4 +209,35 @@ public class Graphe {
         return "Nombre de sommets : "+this.ordre()+"\nNombre d'arc(s)/arrête(s) : "+this.taille()+
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
     }
+    public Graphe versComplet(){
+        int[][] matComp = new int [this.sommets][this.sommets];
+        Graphe gComplet = new Graphe(matComp);
+        for(int i = 0 ; i < gComplet.matrice.length;i++){
+            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+                if( i != j){
+                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                } 
+            }
+        }
+        return gComplet;
+    }
+    public Graphe versComplementaire(){
+        int[][] matComplem = new int [this.sommets][this.sommets];
+        Graphe gComplem = new Graphe(matComplem);
+        gComplem = this.sousMat(this.versComplet());
+        return gComplem;
+    }
+    public Graphe sousMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre()){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gSoustrait = new Graphe(matTemp);
+        for(int i = 0 ; i < this.matrice.length;i++){
+            for (int j = 0 ; j < this.matrice.length;j++){
+                gSoustrait.matrice[i][j]= this.matrice[i][j] - graphe.matrice[i][j];
+            }
+        }
+        return gSoustrait;
+    }
 }
