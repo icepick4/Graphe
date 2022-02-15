@@ -31,6 +31,16 @@ public class GrapheApp {
                             {0,1,0,0,0,1},
                             {0,0,1,0,1,0}
                            };
+        int [][] matriceDsatExemple = {
+                            {0,1,1,1,1,0,0,0},
+                            {1,0,1,1,0,1,0,0},
+                            {1,1,0,0,0,0,0,0},
+                            {1,1,0,0,0,0,0,0},
+                            {1,0,0,0,0,0,1,1},
+                            {0,1,0,0,0,0,1,1},
+                            {0,0,0,0,1,1,0,1},
+                            {0,0,0,0,1,1,1,0},
+                            };
         int [][] matrice1 = {
                             {0,0,1},
                             {0,0,1},
@@ -44,7 +54,7 @@ public class GrapheApp {
                            {0,0,0,1,0,1},
                            {1,0,0,0,1,0}
                           };
-        Graphe graphe1 = new Graphe(matriceStabExemple);
+        Graphe graphe1 = new Graphe(matriceDsatExemple);
         // graphe1.coloration();
         // System.out.println(Arrays.deepToString(graphe1.matrice));
         // System.out.println(graphe1.estComplet());
@@ -52,7 +62,9 @@ public class GrapheApp {
         // System.out.println(graphe1.versComplet().estComplet());
         // System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
         // System.out.println(graphe1.versComplet().estComplet());
-        System.out.print(graphe1.nbStable());
+        // System.out.print(graphe1.degMax());
+        System.out.println(Arrays.deepToString(graphe1.dsat()));
+        System.out.println(graphe1.dsatNbColoration(graphe1.dsat()));
         /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
         afficherListe(graphe1.precedents(0));
