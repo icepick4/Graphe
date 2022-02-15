@@ -21,8 +21,21 @@ public class GrapheApp {
                            {0,0,1,1,0,1},
                            {0,0,1,0,1,0}
                           };
-        Graphe graphe1 = new Graphe(matrice);
-        System.out.println(graphe1.type());
+        int [][] matrice1 = {
+                            {0,0,1},
+                            {0,0,1},
+                            {1,1,0}
+                            };
+        int [][] matrice2 = {
+                           {0,1,0,0,0,1},
+                           {1,0,1,0,0,0},
+                           {0,1,0,1,0,0},
+                           {0,0,1,0,1,0},
+                           {0,0,0,1,0,1},
+                           {1,0,0,0,1,0}
+                          };
+        Graphe graphe1 = new Graphe(matrice2);
+        graphe1.coloration();
         /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
         afficherListe(graphe1.precedents(0));

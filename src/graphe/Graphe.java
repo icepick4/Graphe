@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package graphe;
-
+import java.util.Arrays;
 /**
  *
  * @author Remi
@@ -232,13 +232,184 @@ public class Graphe {
         else{
             //voir  remarque chap 1 page 13
         }
-        
-        
         return maxClique;
     }
+
     @Override
     public String toString(){
         return "Nombre de sommets : "+this.ordre()+"\nNombre d'arc(s)/arrête(s) : "+this.taille()+
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
+    }
+    
+    public void coloration(){
+        if(!(this.estSymetrique()) || !(this.estSimple())){
+            //return "Ce graphe est orienté ou non simple";
+        }
+        int [] SommetsColores = new int[this.sommets];
+        int nbNonColores = this.sommets;
+        int ctr = 1;
+        int couleur;
+        while (listeNonRempli(SommetsColores)) {
+            couleur = ctr;
+            int debut = 0;
+            while(SommetsColores[debut] != 0){
+                debut+=1;
+            }
+            SommetsColores[debut] = couleur;
+            for(int i = debut; i < nbNonColores; i++){
+                if(SommetsColores[i] == 0){
+                    
+                    int x = 0;
+                    for(int j = 0; j < nombreOccurences(SommetsColores,couleur); j++){
+                        while (SommetsColores[x] != couleur){
+                            x+=1;
+                        }
+                        if(!(valeurVerif(this.suivants(i),x))){
+                            SommetsColores[i] = couleur;
+                            nbNonColores-=1;
+                        }
+                    }
+                }
+            }
+            ctr+=1;
+        }
+                /*int ctrcouleur = 0;
+                for(int j = 0; j < nombreOccurences(SommetsColores,couleur); j++){
+                    int x = 0;
+                    while (SommetsColores[x] != couleur){
+                        x+=1;
+                    }
+                    if(!(valeurVerif(this.suivants(j),x)) && SommetColores[i] == 0){
+                        ctrcouleur+=1;
+                    }
+                }
+                if (ctr == nombreOccurences(SommetsColores,couleur)){
+                    
+                }
+            }
+            ctr++;*/
+        
+        afficherListe(SommetsColores);
+        
+    }
+    public static void afficherListe(int[] tab){
+        System.out.print("[");
+        for(int i = 0; i < tab.length; i++){
+            System.out.print(tab[i]);
+            if (i + 1 != tab.length){
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
+    public boolean listeNonRempli(int[] tab){
+        for(int i = 0; i < tab.length; i++){
+            if (tab[i] == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+    public int nombreOccurences(int[] tab, int valeur){
+        int ctr = 0;
+        for(int i = 0;i < tab.length; i++){
+            if(tab[i] == valeur){
+                ctr+=1;
+            }
+        }
+        return ctr;
+    }
+    public boolean valeurVerif (int[] tab,int valeur){
+        for(int i = 0; i < tab.length; i++){
+            if(tab[i] == valeur){
+                return true;
+            }
+        }
+        return false;
+    }
+    public Graphe versComplet(){
+        int[][] matComp = new int [this.sommets][this.sommets];
+        Graphe gComplet = new Graphe(matComp);
+        for(int i = 0 ; i < gComplet.matrice.length;i++){
+            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+                if( i != j){
+                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                } 
+            }
+        }
+        return gComplet;
+    }
+
+    public Graphe versComplementaire(){
+        int[][] matComplem = new int [this.sommets][this.sommets];
+        Graphe gComplem = new Graphe(matComplem);
+        gComplem = this.sousMat(this.versComplet());
+        return gComplem;
+    }
+
+    public Graphe sousMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre()){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gSoustrait = new Graphe(matTemp);
+        for(int i = 0 ; i < this.matrice.length;i++){
+            for (int j = 0 ; j < this.matrice.length;j++){
+                gSoustrait.matrice[i][j]= this.matrice[i][j] - graphe.matrice[i][j];
+            }
+        }
+        return gSoustrait;
+    }
+    public Graphe addMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre()){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gSoustrait = new Graphe(matTemp);
+        for(int i = 0 ; i < this.matrice.length;i++){
+            for (int j = 0 ; j < this.matrice.length;j++){
+                gSoustrait.matrice[i][j]= this.matrice[i][j] + graphe.matrice[i][j];
+            }
+        }
+        return gSoustrait;
+    }
+    public Graphe multMat(Graphe graphe){
+        if (this.ordre() != graphe.ordre() || this.matrice[0].length != graphe.matrice.length){
+            return null;
+        }
+        int[][] matTemp = new int [this.sommets][graphe.matrice[0].length];
+        Graphe gMult = new Graphe(matTemp);
+        for(int i = 0 ; i < gMult.matrice.length;i++){
+            for(int j=  0 ; j< gMult.matrice[0].length;j++){
+                gMult.matrice[i][j] = this.multAdd(graphe,i,j); //appelle de la méthode de produit vectoriel.
+            }
+        }
+        return gMult;
+    }
+    public Graphe multMat(int coeff){
+        int[][] matTemp = new int [this.sommets][this.sommets];
+        Graphe gMult = new Graphe(matTemp);
+        for(int i = 0 ; i < gMult.matrice.length;i++){
+            for(int j=  0 ; j< gMult.matrice[0].length;j++){
+                gMult.matrice[i][j] *= coeff;
+            }
+        }
+        return gMult;
+        }
+    /**
+     * 
+     *fonction du calcul de produit vectoriel à une position donnée de la matrice résultante.
+     * 
+     * @param graphe
+     * @param ligne
+     * @param col
+     * @return le résultat du produit vectoriel à une position donnée.
+     */
+    public int multAdd(Graphe graphe, int ligne,int col){
+        int result = 0;
+        for(int i = 0 ; i < this.matrice[ligne].length;i++){
+            result += (this.matrice[ligne][i]*graphe.matrice[i][col]);// on fait la somme des produits de l'élément i de la ligne de la matrice multipliée par l'élément i de la colone de la matrice multiplicatrice.
+        }
+        return result;
     }
 }
