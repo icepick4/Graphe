@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package graphe;
-
+import java.util.Arrays;
 /**
  *
  * @author Remi
@@ -292,5 +292,41 @@ public class Graphe {
             result += (this.matrice[ligne][i]*graphe.matrice[i][col]);// on fait la somme des produits de l'élément i de la ligne de la matrice multipliée par l'élément i de la colone de la matrice multiplicatrice.
         }
         return result;
+    }
+    public int nbClique(){
+        if (!this.estSimple()){
+            System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
+            return -1;
+        }
+        int nbClique= 0;
+        int[] tempClique = new int[this.sommets];
+            for (int i=0; i<this.matrice.length;i++) {
+                tempClique = this.clique(i);
+                int j=0;
+                while (tempClique[j]!=-1) {
+                    j++;
+                }
+                if (nbClique < j){
+                    nbClique= j;
+                }
+            }
+        return nbClique;
+    }
+    public int[] clique(int sommet){
+        int[] clique = new int[this.sommets];
+        Arrays.fill(clique,-1);
+        int indexC = 0;
+        clique[0] = sommet;
+        do{
+            for(int i=sommet;i<this.matrice.length;i++){
+                for(int j =0;j<clique.length;j++){
+                    if(clique[j]!=-1 && i!=sommet && verifSuccesseur(clique[j],i) && verifSuccesseur(i,clique[j])){
+                        clique[indexC+1]=i;
+                        indexC++;
+                    }
+                }
+            }
+        }while(clique[indexC] != -1);   
+        return clique;
     }
 }
