@@ -34,17 +34,18 @@ public class GrapheApp {
                            {0,0,0,1,0,1},
                            {1,0,0,0,1,0}
                           };
-        Graphe graphe1 = new Graphe(matrice2);
-        graphe1.coloration();
+        Graphe graphe1 = new Graphe(matrice);
+        // graphe1.coloration();
+        System.out.print(graphe1.nbClique());
         /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
         afficherListe(graphe1.precedents(0));
         afficherListeDegres(graphe1);
         System.out.println(graphe1.estComplet());
         System.out.println(graphe1); */
-        afficherListe(graphe1.suivants(0));
-        afficherListe(graphe1.precedents(0));
-        System.out.println(graphe1);
+        // afficherListe(graphe1.suivants(0));
+        // afficherListe(graphe1.precedents(0));
+        // System.out.println(graphe1);
     }
     public static void afficherListe(int[] tab){
         System.out.print("[");

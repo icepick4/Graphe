@@ -4,6 +4,7 @@
  */
 package graphe;
 import java.util.Arrays;
+import java.util.ArrayList;
 /**
  *
  * @author Remi
@@ -418,34 +419,31 @@ public class Graphe {
             return -1;
         }
         int nbClique= 0;
-        int[] tempClique = new int[this.sommets];
+        int tempNb = 0;
             for (int i=0; i<this.matrice.length;i++) {
-                tempClique = this.clique(i);
-                int j=0;
-                while (tempClique[j]!=-1) {
-                    j++;
-                }
-                if (nbClique < j){
-                    nbClique= j;
+                tempNb = this.clique(i).size();
+                if (nbClique < tempNb){
+                    nbClique = tempNb;
                 }
             }
         return nbClique;
     }
-    public int[] clique(int sommet){
-        int[] clique = new int[this.sommets];
-        Arrays.fill(clique,-1);
-        int indexC = 0;
-        clique[0] = sommet;
-        do{
-            for(int i=sommet;i<this.matrice.length;i++){
-                for(int j =0;j<clique.length;j++){
-                    if(clique[j]!=-1 && i!=sommet && verifSuccesseur(clique[j],i) && verifSuccesseur(i,clique[j])){
-                        clique[indexC+1]=i;
-                        indexC++;
-                    }
+    public ArrayList<Integer> clique(int sommet){
+        ArrayList<Integer> clique = new ArrayList<>();
+        clique.add(sommet);
+        int valid = 0;     
+        for(int j = sommet+1 ; j < this.matrice.length; j++){
+            for(int i = 0; i < clique.size(); i++){
+                if (verifSuccesseur(clique.get(i), j) && verifSuccesseur(j, clique.get(i)) && !(clique.contains(j))){
+                    valid++;
                 }
             }
-        }while(clique[indexC] != -1);   
+            if(valid == clique.size()){
+                clique.add(j);
+            }
+            valid = 0;
+        }
+        System.out.println(clique);
         return clique;
     }
 }
