@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Graphe {
     private int sommets;
     private int arretes;
-    private int[][] matrice = new int [sommets][sommets];
+    public int[][] matrice = new int [sommets][sommets];
     
     Graphe(int [][] matrice){
         this.matrice = matrice;
@@ -236,11 +236,11 @@ public class Graphe {
         return maxClique;
     }
 
-    @Override
-    public String toString(){
-        return "Nombre de sommets : "+this.ordre()+"\nNombre d'arc(s)/arrête(s) : "+this.taille()+
-                "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
-    }
+    // @Override
+    // public String toString(){
+    //     return "Nombre de sommets : "+this.ordre()+"\nNombre d'arc(s)/arrête(s) : "+this.taille()+
+    //             "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
+    // }
     
     public void coloration(){
         if(!(this.estSymetrique()) || !(this.estSimple())){
@@ -344,7 +344,7 @@ public class Graphe {
     public Graphe versComplementaire(){
         int[][] matComplem = new int [this.sommets][this.sommets];
         Graphe gComplem = new Graphe(matComplem);
-        gComplem = this.sousMat(this.versComplet());
+        gComplem = this.versComplet().sousMat(this);
         return gComplem;
     }
 
@@ -434,7 +434,7 @@ public class Graphe {
         int valid = 0;     
         for(int j = sommet+1 ; j < this.matrice.length; j++){
             for(int i = 0; i < clique.size(); i++){
-                if (verifSuccesseur(clique.get(i), j) && verifSuccesseur(j, clique.get(i)) && !(clique.contains(j))){
+                if (this.verifSuccesseur(clique.get(i), j) && this.verifSuccesseur(j, clique.get(i)) && !(clique.contains(j))){
                     valid++;
                 }
             }
@@ -445,5 +445,41 @@ public class Graphe {
         }
         System.out.println(clique);
         return clique;
+    }
+    public int nbStable(){
+        if (!this.estSimple()){
+            System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
+            return -1;
+        }
+        int nbStable= 0;
+        int tempNb = 0;
+            for (int i=0; i<this.matrice.length;i++) {
+                tempNb = this.stable(i).size();
+                if (nbStable < tempNb){
+                    nbStable = tempNb;
+                }
+            }
+        return nbStable;
+    }
+    public ArrayList<Integer> stable(int sommet){
+        int[][] matComplem = new int [this.sommets][this.sommets];
+        Graphe gComplem = new Graphe(matComplem);
+        gComplem = this.versComplementaire();
+        ArrayList<Integer> stable = new ArrayList<>();
+        stable.add(sommet);
+        int valid = 0;     
+        for(int j = sommet+1 ; j < gComplem.matrice.length; j++){
+            for(int i = 0; i < stable.size(); i++){
+                if (gComplem.verifSuccesseur(stable.get(i), j) && gComplem.verifSuccesseur(j, stable.get(i)) && !(stable.contains(j))){
+                    valid++;
+                }
+            }
+            if(valid == stable.size()){
+                stable.add(j);
+            }
+            valid = 0;
+        }
+        System.out.println(stable);
+        return stable;
     }
 }

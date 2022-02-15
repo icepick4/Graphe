@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package graphe;
+import java.util.Arrays;
+
 /**
  *
  * @author Remi
@@ -21,6 +23,14 @@ public class GrapheApp {
                            {0,0,1,1,0,1},
                            {0,0,1,0,1,0}
                           };
+        int [][] matriceStabExemple = {
+                            {0,1,0,1,0,0},
+                            {1,0,1,0,1,0},
+                            {0,1,0,1,0,1},
+                            {1,0,1,0,0,0},
+                            {0,1,0,0,0,1},
+                            {0,0,1,0,1,0}
+                           };
         int [][] matrice1 = {
                             {0,0,1},
                             {0,0,1},
@@ -34,14 +44,19 @@ public class GrapheApp {
                            {0,0,0,1,0,1},
                            {1,0,0,0,1,0}
                           };
-        Graphe graphe1 = new Graphe(matrice);
+        Graphe graphe1 = new Graphe(matriceStabExemple);
         // graphe1.coloration();
-        System.out.print(graphe1.nbClique());
+        // System.out.println(Arrays.deepToString(graphe1.matrice));
+        // System.out.println(graphe1.estComplet());
+        // System.out.println(Arrays.deepToString(graphe1.versComplet().matrice));
+        // System.out.println(graphe1.versComplet().estComplet());
+        // System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
+        // System.out.println(graphe1.versComplet().estComplet());
+        System.out.print(graphe1.nbStable());
         /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
         afficherListe(graphe1.precedents(0));
         afficherListeDegres(graphe1);
-        System.out.println(graphe1.estComplet());
         System.out.println(graphe1); */
         // afficherListe(graphe1.suivants(0));
         // afficherListe(graphe1.precedents(0));
