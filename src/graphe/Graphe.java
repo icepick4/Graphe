@@ -245,53 +245,78 @@ public class Graphe {
         if(!(this.estSymetrique()) || !(this.estSimple())){
             //return "Ce graphe est orienté ou non simple";
         }
-        int [] SommetsColores = new int[this.sommets];
-        int nbNonColores = this.sommets;
+        int[] SommetsColores = new int[this.sommets];
+        int[][] NonColores = new int[this.sommets][2];
+        for(int i = 0; i < this.sommets; i++){
+            NonColores[i][0] = this.degre(i)[0];
+            NonColores[i][1] = i;
+        }
+        NonColores = trier(NonColores,NonColores.length);
+        int [] SommetsNonColores;
+        SommetsNonColores = new int[this.sommets];
+        for(int i = 0; i < this.sommets; i++){
+            SommetsNonColores[i] = NonColores[i][1];
+        }
+        System.out.println(NonColores[0][1]);
+        System.out.println(NonColores[1][1]);
+        System.out.println(NonColores[2][1]);
         int ctr = 1;
         int couleur;
+        afficherListe(SommetsNonColores);
         while (listeNonRempli(SommetsColores)) {
             couleur = ctr;
             int debut = 0;
             while(SommetsColores[debut] != 0){
-                debut+=1;
+                debut++;
             }
             SommetsColores[debut] = couleur;
-            for(int i = debut; i < nbNonColores; i++){
+            //afficherListe(SommetsNonColores);
+            /*for (int i = debut; i < SommetsNonColores.length - 1; i++) {
+                SommetsNonColores[i] = SommetsNonColores[i + 1];
+            }*/
+            //System.out.println("Sommets non Colores : ");
+            //afficherListe(SommetsNonColores);
+            
+            int cpt = 0;
+            for (int i : SommetsNonColores) {
                 if(SommetsColores[i] == 0){
-                    
-                    int x = 0;
-                    for(int j = 0; j < nombreOccurences(SommetsColores,couleur); j++){
-                        while (SommetsColores[x] != couleur){
-                            x+=1;
+                    for (int j : SommetsColores) {
+                        if(j == couleur && !(valeurVerif(this.suivants(i),j))){//ne prend pas en compte la coloration en direct
+                            cpt++;
+                            //SommetsNonColores
                         }
-                        if(!(valeurVerif(this.suivants(i),x))){
-                            SommetsColores[i] = couleur;
-                            nbNonColores-=1;
-                        }
+                    }
+                    if (cpt == nombreOccurences(SommetsColores, couleur)){
+                        SommetsColores[i] = couleur; 
                     }
                 }
             }
             ctr+=1;
+            System.out.println("Sommets Colores : ");
+            afficherListe(SommetsColores);
         }
-                /*int ctrcouleur = 0;
-                for(int j = 0; j < nombreOccurences(SommetsColores,couleur); j++){
-                    int x = 0;
-                    while (SommetsColores[x] != couleur){
-                        x+=1;
-                    }
-                    if(!(valeurVerif(this.suivants(j),x)) && SommetColores[i] == 0){
-                        ctrcouleur+=1;
-                    }
-                }
-                if (ctr == nombreOccurences(SommetsColores,couleur)){
-                    
-                }
-            }
-            ctr++;*/
-        
-        afficherListe(SommetsColores);
+        //afficherListe(SommetsColores);
         
     }
+    public int[][] trier( int tab_arg[][], int nb_case )
+{
+     int i, j; 
+     int[] tmp;
+
+     for(i=0; i<=nb_case-2; i++) /* nombre de remontée des bulles */
+     {
+         for(j=0; j<nb_case-1-i; j++) /* les cases dans ]nb_case-1-i;nb_case-1] sont triées */
+         {
+              if(tab_arg[j][0] < tab_arg[j+1][0])
+              {
+                  tmp = tab_arg[j+1];
+                  tab_arg[j+1] = tab_arg[j];
+                  tab_arg[j] = tmp;
+              }
+         }
+     }
+     return tab_arg;
+}
     public static void afficherListe(int[] tab){
         System.out.print("[");
         for(int i = 0; i < tab.length; i++){
@@ -301,6 +326,14 @@ public class Graphe {
             }
         }
         System.out.println("]");
+    }
+    public int[][] supprOccurence(int[][] tab, int valeur){
+        for(int i = 0; i < tab.length; i++){
+            if(tab[i][1] == valeur){
+                
+            }
+        }
+        return tab;
     }
     public boolean listeNonRempli(int[] tab){
         for(int i = 0; i < tab.length; i++){
@@ -436,11 +469,12 @@ public class Graphe {
         Arrays.fill(clique,-1);
         int indexC = 0;
         clique[0] = sommet;
+        indexC++;
         do{
             for(int i=sommet;i<this.matrice.length;i++){
                 for(int j =0;j<clique.length;j++){
                     if(clique[j]!=-1 && i!=sommet && verifSuccesseur(clique[j],i) && verifSuccesseur(i,clique[j])){
-                        clique[indexC+1]=i;
+                        clique[indexC]=i;
                         indexC++;
                     }
                 }
