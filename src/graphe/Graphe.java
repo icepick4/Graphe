@@ -6,6 +6,8 @@ package graphe;
 import java.util.Arrays;
 import java.net.ContentHandler;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 /**
  *
  * @author Remi
@@ -300,25 +302,24 @@ public class Graphe {
         //afficherListe(SommetsColores);
         
     }
-    public int[][] trier( int tab_arg[][], int nb_case )
-{
-     int i, j; 
-     int[] tmp;
+    public int[][] trier( int tab_arg[][], int nb_case ){
+        int i, j; 
+        int[] tmp;
 
-     for(i=0; i<=nb_case-2; i++) /* nombre de remontée des bulles */
-     {
-         for(j=0; j<nb_case-1-i; j++) /* les cases dans ]nb_case-1-i;nb_case-1] sont triées */
-         {
-              if(tab_arg[j][0] < tab_arg[j+1][0])
-              {
-                  tmp = tab_arg[j+1];
-                  tab_arg[j+1] = tab_arg[j];
-                  tab_arg[j] = tmp;
-              }
-         }
-     }
-     return tab_arg;
-}
+        for(i=0; i<=nb_case-2; i++) /* nombre de remontée des bulles */
+        {
+            for(j=0; j<nb_case-1-i; j++) /* les cases dans ]nb_case-1-i;nb_case-1] sont triées */
+            {
+                if(tab_arg[j][0] < tab_arg[j+1][0])
+                {
+                    tmp = tab_arg[j+1];
+                    tab_arg[j+1] = tab_arg[j];
+                    tab_arg[j] = tmp;
+                }
+            }
+        }
+        return tab_arg;
+    }
     public static void afficherListe(int[] tab){
         System.out.print("[");
         for(int i = 0; i < tab.length; i++){
@@ -364,6 +365,18 @@ public class Graphe {
     }
     public Graphe versComplet(){
         int[][] matComp = new int [this.sommets][this.sommets];
+        Graphe gComplet = new Graphe(matComp);
+        for(int i = 0 ; i < gComplet.matrice.length;i++){
+            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+                if( i != j){
+                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                } 
+            }
+        }
+        return gComplet;
+    }
+    public Graphe versComplet(int coeff){
+        int[][] matComp = new int [coeff][coeff];
         Graphe gComplet = new Graphe(matComp);
         for(int i = 0 ; i < gComplet.matrice.length;i++){
             for(int j = 0 ; j < gComplet.matrice.length ; j++){
@@ -605,6 +618,7 @@ public class Graphe {
     public boolean relies(int sommet1, int sommet2) {
         return (this.verifSuccesseur(sommet1, sommet2) && this.verifSuccesseur(sommet2, sommet1));
     }
+
     public ArrayList couleursRelies(int sommet,int[][] dtable){
         ArrayList couleurs = new ArrayList<>();
         for(int i = 0; i < dtable.length; i++){
@@ -624,5 +638,5 @@ public class Graphe {
             }
         }
         return dsatNb;
-    }
+    }    
 }
