@@ -4,7 +4,6 @@
  */
 package graphe;
 import java.util.Arrays;
-import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
@@ -245,62 +244,48 @@ public class Graphe {
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
     }
     
-    public void coloration(){
+    public int WelshPowell(){
         if(!(this.estSymetrique()) || !(this.estSimple())){
             //return "Ce graphe est orienté ou non simple";
         }
         int[] SommetsColores = new int[this.sommets];
+        int[] Sommets = initWelshPowell();
+        int ctr = 1;
+        int couleur;
+        while (listeNonRempli(SommetsColores)) {
+            couleur = ctr;     
+            for (int i : Sommets) {
+                if(SommetsColores[i] == 0){
+                    ArrayList <Integer> tab;
+                    tab = this.couleursRelies(i, SommetsColores);
+                    if(!(tab.contains(couleur))){ 
+                        SommetsColores[i] = couleur;
+                    } 
+                }
+            }
+            ctr+=1;
+        }
+        int max = 0;
+        for(int i = 0; i < SommetsColores.length; i++){
+            if(max < SommetsColores[i]){
+                max = SommetsColores[i];
+            }
+        }
+        return max;
+    }
+    public int[] initWelshPowell(){
         int[][] NonColores = new int[this.sommets][2];
         for(int i = 0; i < this.sommets; i++){
             NonColores[i][0] = this.degre(i)[0];
             NonColores[i][1] = i;
         }
         NonColores = trier(NonColores,NonColores.length);
-        int [] SommetsNonColores;
-        SommetsNonColores = new int[this.sommets];
+        int [] Sommets;
+        Sommets = new int[this.sommets];
         for(int i = 0; i < this.sommets; i++){
-            SommetsNonColores[i] = NonColores[i][1];
+            Sommets[i] = NonColores[i][1];
         }
-        System.out.println(NonColores[0][1]);
-        System.out.println(NonColores[1][1]);
-        System.out.println(NonColores[2][1]);
-        int ctr = 1;
-        int couleur;
-        afficherListe(SommetsNonColores);
-        while (listeNonRempli(SommetsColores)) {
-            couleur = ctr;
-            int debut = 0;
-            while(SommetsColores[debut] != 0){
-                debut++;
-            }
-            SommetsColores[debut] = couleur;
-            //afficherListe(SommetsNonColores);
-            /*for (int i = debut; i < SommetsNonColores.length - 1; i++) {
-                SommetsNonColores[i] = SommetsNonColores[i + 1];
-            }*/
-            //System.out.println("Sommets non Colores : ");
-            //afficherListe(SommetsNonColores);
-            
-            int cpt = 0;
-            for (int i : SommetsNonColores) {
-                if(SommetsColores[i] == 0){
-                    for (int j : SommetsColores) {
-                        if(j == couleur && !(valeurVerif(this.suivants(i),j))){//ne prend pas en compte la coloration en direct
-                            cpt++;
-                            //SommetsNonColores
-                        }
-                    }
-                    if (cpt == nombreOccurences(SommetsColores, couleur)){
-                        SommetsColores[i] = couleur; 
-                    }
-                }
-            }
-            ctr+=1;
-            System.out.println("Sommets Colores : ");
-            afficherListe(SommetsColores);
-        }
-        //afficherListe(SommetsColores);
-        
+        return Sommets;
     }
     public int[][] trier( int tab_arg[][], int nb_case ){
         int i, j; 
@@ -330,14 +315,7 @@ public class Graphe {
         }
         System.out.println("]");
     }
-    public int[][] supprOccurence(int[][] tab, int valeur){
-        for(int i = 0; i < tab.length; i++){
-            if(tab[i][1] == valeur){
-                
-            }
-        }
-        return tab;
-    }
+
     public boolean listeNonRempli(int[] tab){
         for(int i = 0; i < tab.length; i++){
             if (tab[i] == 0){
@@ -389,8 +367,7 @@ public class Graphe {
     }
 
     public Graphe versComplementaire(){
-        int[][] matComplem = new int [this.sommets][this.sommets];
-        Graphe gComplem = new Graphe(matComplem);
+        Graphe gComplem;
         gComplem = this.versComplet().sousMat(this);
         return gComplem;
     }
@@ -437,9 +414,9 @@ public class Graphe {
     public Graphe multMat(int coeff){
         int[][] matTemp = new int [this.sommets][this.sommets];
         Graphe gMult = new Graphe(matTemp);
-        for(int i = 0 ; i < gMult.matrice.length;i++){
-            for(int j=  0 ; j< gMult.matrice[0].length;j++){
-                gMult.matrice[i][j] *= coeff;
+        for (int[] matrice1 : gMult.matrice) {
+            for (int j = 0; j< gMult.matrice[0].length; j++) {
+                matrice1[j] *= coeff;
             }
         }
         return gMult;
@@ -466,7 +443,7 @@ public class Graphe {
             return -1;
         }
         int nbClique= 0;
-        int tempNb = 0;
+        int tempNb;
             for (int i=0; i<this.matrice.length;i++) {
                 tempNb = this.clique(i).size();
                 if (nbClique < tempNb){
@@ -499,7 +476,7 @@ public class Graphe {
             return -1;
         }
         int nbStable= 0;
-        int tempNb = 0;
+        int tempNb;
             for (int i=0; i<this.matrice.length;i++) {
                 tempNb = this.stable(i).size();
                 if (nbStable < tempNb){
@@ -509,8 +486,7 @@ public class Graphe {
         return nbStable;
     }
     public ArrayList<Integer> stable(int sommet){
-        int[][] matComplem = new int [this.sommets][this.sommets];
-        Graphe gComplem = new Graphe(matComplem);
+        Graphe gComplem;
         gComplem = this.versComplementaire();
         ArrayList<Integer> stable = new ArrayList<>();
         stable.add(sommet);
@@ -530,7 +506,7 @@ public class Graphe {
         return stable;
     }
     public int[][] dsat(){
-        int[][] dsatTable = new int[this.sommets][3];
+        int[][] dsatTable;
         dsatTable = this.initDsat();
         // System.out.println(Arrays.deepToString(dsatTable));
         int dsatMax = dsatMax(dsatTable);
@@ -572,8 +548,8 @@ public class Graphe {
     public int dsatMax(int[][] dTable){
         int dsatMax = 0;
         int tempDeg;
-        for(int i = 0; i < dTable.length; i++){
-            tempDeg = dTable[i][2];
+        for (int[] dTable1 : dTable) {
+            tempDeg = dTable1[2];
             if(tempDeg > dsatMax){
                 dsatMax = tempDeg;
             }
@@ -581,15 +557,15 @@ public class Graphe {
         return dsatMax;
     }
     public boolean listeNonRempli(int[][] tab){
-        for(int i = 0; i < tab.length; i++){
-            if (tab[i][1] == 0){
+        for (int[] tab1 : tab) {
+            if (tab1[1] == 0) {
                 return true;
             }
         }
         return false;
     }
     public void setColor(int sommet, int[][] dtable){
-        ArrayList couleursRelies = new ArrayList();
+        ArrayList couleursRelies;
         couleursRelies = couleursRelies(sommet, dtable);
         for(int couleur = 1; couleur < dtable.length; couleur++){
             if(!(couleursRelies.contains(couleur))){
@@ -602,13 +578,12 @@ public class Graphe {
     }
     public void actuDsat(int sommet,int[][] dtable){
         dtable[sommet][2]= -1;
-        ArrayList comCouleurs = new ArrayList<>();
-        boolean actu = false;
+        ArrayList comCouleurs;
         for (int i = 0; i < dtable.length; i++){
             comCouleurs = couleursRelies(i, dtable);
             // System.out.println(i+" : "+comCouleurs);
 
-            if(dtable[i][2]!= -1 && comCouleurs.size()>0){
+            if(dtable[i][2]!= -1 && !comCouleurs.isEmpty()){
                 dtable[i][2] = comCouleurs.size();
             }
         }
@@ -628,11 +603,20 @@ public class Graphe {
         }
         return couleurs;
     }
+    public ArrayList couleursRelies(int sommet,int[] dtable){
+        ArrayList couleurs = new ArrayList<>();
+        for(int i = 0; i < dtable.length; i++){
+           if(this.relies(sommet, i) && dtable[i]!=0 && !(couleurs.contains(dtable[i])) ){
+                couleurs.add(dtable[i]); 
+            }
+        }
+        return couleurs;
+    }
     public int dsatNbColoration(int[][] dTable){
         int dsatNb = 0;
         int tempNb;
-        for(int i = 0; i < dTable.length; i++){
-            tempNb = dTable[i][1];
+        for (int[] dTable1 : dTable) {
+            tempNb = dTable1[1];
             if(tempNb > dsatNb){
                 dsatNb = tempNb;
             }
