@@ -13,16 +13,16 @@ import java.util.Collections;
  */
 public class Graphe {
     private int sommets;
-    private int arretes;
-    public int[][] matrice = new int [sommets][sommets];
+    private int aretes;
+    public Matrice matrice;
     
-    Graphe(int [][] matrice){
+    Graphe(Matrice matrice){
         this.matrice = matrice;
-        this.sommets = matrice.length;
-        this.arretes = 0;
-        for(int[] ligne : this.matrice){
+        this.sommets = matrice.lignes();
+        this.aretes = 0;
+        for(int[] ligne : this.matrice.matrice){
             for(int colonne : ligne){
-                this.arretes+=colonne;
+                this.aretes+=colonne;
             }
         } 
     }
@@ -32,7 +32,7 @@ public class Graphe {
     }
     
     public int taille(){
-        return this.arretes;
+        return this.aretes;
     }
     
     public String type(){
@@ -52,8 +52,8 @@ public class Graphe {
     
     public int pGraphe(){
         int max = 0;
-        for (int[] ligne : this.matrice) {
-            for (int j = 0; j < this.matrice.length; j++) {
+        for (int[] ligne : this.matrice.matrice) {
+            for (int j = 0; j < this.ordre(); j++) {
                 if (ligne[j] > max) {
                     max = ligne[j];
                 }
@@ -63,9 +63,9 @@ public class Graphe {
     }
     
     public boolean estElementaire(){
-        for(int i = 0; i < this.matrice.length; i++){
-            for(int j = 0; j < this.matrice.length; j++){
-                if(i == j && matrice[i][j] == 1){
+        for(int i = 0; i < this.ordre(); i++){
+            for(int j = 0; j < this.ordre(); j++){
+                if(i == j && this.matrice.matrice[i][j] == 1){
                     return false;
                 }
             }
@@ -92,18 +92,18 @@ public class Graphe {
             checkOriente = 3;
         }
         int[] degres = new int[checkOriente];
-        for(int i = 0; i<this.matrice.length; i++){
-            if (this.matrice[sommet][i] != 0){
-                degres[0]+=this.matrice[sommet][i];
+        for(int i = 0; i<this.ordre(); i++){
+            if (this.matrice.matrice[sommet][i] != 0){
+                degres[0]+=this.matrice.matrice[sommet][i];
                 if(degres.length > 1){
-                    degres[1]+=this.matrice[sommet][i];
+                    degres[1]+=this.matrice.matrice[sommet][i];
                 }
                 
             }
-            if (this.matrice[i][sommet] != 0){
+            if (this.matrice.matrice[i][sommet] != 0){
                 if(degres.length > 1){
-                    degres[0]+=this.matrice[i][sommet];
-                    degres[2]+=this.matrice[i][sommet];
+                    degres[0]+=this.matrice.matrice[i][sommet];
+                    degres[2]+=this.matrice.matrice[i][sommet];
                 }
             }
         }
@@ -111,7 +111,7 @@ public class Graphe {
     }
     
     public int sommeDegre(){
-        return this.arretes*2;
+        return this.aretes*2;
     }
     /**
      * 
@@ -128,8 +128,8 @@ public class Graphe {
         }
         int[] suivants = new int[this.degre(sommet)[checkOriente]];
         int ctr = 0;
-        for(int i = 0; i < this.matrice.length; i++){
-            if(matrice[sommet][i] != 0){
+        for(int i = 0; i < this.ordre(); i++){
+            if(this.matrice.matrice[sommet][i] != 0){
                 suivants[ctr] = i;
                 ctr+=1;
             }
@@ -151,8 +151,8 @@ public class Graphe {
         }
         int[] precedents = new int[this.degre(sommet)[checkOriente]];
         int ctr = 0;
-        for(int i = 0; i < this.matrice.length; i++){
-            if(matrice[i][sommet] != 0){
+        for(int i = 0; i < this.ordre(); i++){
+            if(this.matrice.matrice[i][sommet] != 0){
                 precedents[ctr] = i;
                 ctr+=1;
             }
@@ -191,9 +191,9 @@ public class Graphe {
     }
 
     public boolean estSymetrique(){
-        for(int i = 0; i < this.matrice.length; i++){
-            for(int j = 0 ; j < this.matrice.length; j++){
-                if (this.matrice[i][j] != this.matrice[j][i]){
+        for(int i = 0; i < this.ordre(); i++){
+            for(int j = 0 ; j < this.ordre(); j++){
+                if (this.matrice.matrice[i][j] != this.matrice.matrice[j][i]){
                     return false;
                 }
             }
@@ -202,41 +202,15 @@ public class Graphe {
     }
     
     public boolean estComplet(){
-        for(int i = 0; i < this.matrice.length; i++){
-            for(int j = 0; j < this.matrice.length; j++){
-                if(i != j && this.matrice[i][j] != 1){
+        for(int i = 0; i < this.ordre(); i++){
+            for(int j = 0; j < this.ordre(); j++){
+                if(i != j && this.matrice.matrice[i][j] != 1){
                     return false;
                 }
             }
         }
         return true;
     } 
-    
-    public int nombreClique(){
-        if(!(this.estSimple())){
-            return 0;
-        }
-        int maxClique = 0;
-        int[] clique = new int[this.ordre()];
-        if(this.estSymetrique()){
-            for(int i = 0; i < this.ordre(); i++){    
-                int []suivants = this.suivants(i);
-                for(int j = 0; j < suivants.length; j++){
-                    /*if (this.suivants(suivants[j]) < i){
-                        
-                    }*/
-                
-                    return nombreClique();
-                }
-                
-            }
-        
-        }
-        else{
-            //voir  remarque chap 1 page 13
-        }
-        return maxClique;
-    }
 
     @Override
     public String toString(){
@@ -244,7 +218,7 @@ public class Graphe {
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
     }
     
-    public int WelshPowell(){
+    public int[] welshPowell(){
         if(!(this.estSymetrique()) || !(this.estSimple())){
             //return "Ce graphe est orienté ou non simple";
         }
@@ -265,6 +239,16 @@ public class Graphe {
             }
             ctr+=1;
         }
+        int max = 0;
+        for(int i = 0; i < SommetsColores.length; i++){
+            if(max < SommetsColores[i]){
+                max = SommetsColores[i];
+            }
+        }
+        return SommetsColores;
+    }
+    public int maxWelshPowell(){
+        int [] SommetsColores = this.welshPowell();
         int max = 0;
         for(int i = 0; i < SommetsColores.length; i++){
             if(max < SommetsColores[i]){
@@ -342,12 +326,12 @@ public class Graphe {
         return false;
     }
     public Graphe versComplet(){
-        int[][] matComp = new int [this.sommets][this.sommets];
+        Matrice matComp = new Matrice(new int [this.sommets][this.sommets]);
         Graphe gComplet = new Graphe(matComp);
-        for(int i = 0 ; i < gComplet.matrice.length;i++){
-            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+        for(int i = 0 ; i < gComplet.ordre();i++){
+            for(int j = 0 ; j < gComplet.ordre() ; j++){
                 if( i != j){
-                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                    gComplet.matrice.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
                 } 
             }
         }
@@ -367,76 +351,10 @@ public class Graphe {
     }
 
     public Graphe versComplementaire(){
-        Graphe gComplem;
-        gComplem = this.versComplet().sousMat(this);
+        Graphe gComplem = new Graphe(this.versComplet().matrice.sousMat(this.matrice));
         return gComplem;
     }
 
-    public Graphe sousMat(Graphe graphe){
-        if (this.ordre() != graphe.ordre()){
-            return null;
-        }
-        int[][] matTemp = new int [this.sommets][this.sommets];
-        Graphe gSoustrait = new Graphe(matTemp);
-        for(int i = 0 ; i < this.matrice.length;i++){
-            for (int j = 0 ; j < this.matrice.length;j++){
-                gSoustrait.matrice[i][j]= this.matrice[i][j] - graphe.matrice[i][j];
-            }
-        }
-        return gSoustrait;
-    }
-    public Graphe addMat(Graphe graphe){
-        if (this.ordre() != graphe.ordre()){
-            return null;
-        }
-        int[][] matTemp = new int [this.sommets][this.sommets];
-        Graphe gSoustrait = new Graphe(matTemp);
-        for(int i = 0 ; i < this.matrice.length;i++){
-            for (int j = 0 ; j < this.matrice.length;j++){
-                gSoustrait.matrice[i][j]= this.matrice[i][j] + graphe.matrice[i][j];
-            }
-        }
-        return gSoustrait;
-    }
-    public Graphe multMat(Graphe graphe){
-        if (this.ordre() != graphe.ordre() || this.matrice[0].length != graphe.matrice.length){
-            return null;
-        }
-        int[][] matTemp = new int [this.sommets][graphe.matrice[0].length];
-        Graphe gMult = new Graphe(matTemp);
-        for(int i = 0 ; i < gMult.matrice.length;i++){
-            for(int j=  0 ; j< gMult.matrice[0].length;j++){
-                gMult.matrice[i][j] = this.multAdd(graphe,i,j); //appelle de la méthode de produit vectoriel.
-            }
-        }
-        return gMult;
-    }
-    public Graphe multMat(int coeff){
-        int[][] matTemp = new int [this.sommets][this.sommets];
-        Graphe gMult = new Graphe(matTemp);
-        for (int[] matrice1 : gMult.matrice) {
-            for (int j = 0; j< gMult.matrice[0].length; j++) {
-                matrice1[j] *= coeff;
-            }
-        }
-        return gMult;
-        }
-    /**
-     * 
-     *fonction du calcul de produit vectoriel à une position donnée de la matrice résultante.
-     * 
-     * @param graphe
-     * @param ligne
-     * @param col
-     * @return le résultat du produit vectoriel à une position donnée.
-     */
-    public int multAdd(Graphe graphe, int ligne,int col){
-        int result = 0;
-        for(int i = 0 ; i < this.matrice[ligne].length;i++){
-            result += (this.matrice[ligne][i]*graphe.matrice[i][col]);// on fait la somme des produits de l'élément i de la ligne de la matrice multipliée par l'élément i de la colone de la matrice multiplicatrice.
-        }
-        return result;
-    }
     public int nbClique(){
         if (!this.estSimple()){
             System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
@@ -444,7 +362,7 @@ public class Graphe {
         }
         int nbClique= 0;
         int tempNb;
-            for (int i=0; i<this.matrice.length;i++) {
+            for (int i=0; i<this.ordre();i++) {
                 tempNb = this.clique(i).size();
                 if (nbClique < tempNb){
                     nbClique = tempNb;
@@ -456,7 +374,7 @@ public class Graphe {
         ArrayList<Integer> clique = new ArrayList<>();
         clique.add(sommet);
         int valid = 0;     
-        for(int j = sommet+1 ; j < this.matrice.length; j++){
+        for(int j = sommet+1 ; j < this.ordre(); j++){
             for(int i = 0; i < clique.size(); i++){
                 if (this.verifSuccesseur(clique.get(i), j) && this.verifSuccesseur(j, clique.get(i)) && !(clique.contains(j))){
                     valid++;
@@ -477,7 +395,7 @@ public class Graphe {
         }
         int nbStable= 0;
         int tempNb;
-            for (int i=0; i<this.matrice.length;i++) {
+            for (int i=0; i<this.ordre();i++) {
                 tempNb = this.stable(i).size();
                 if (nbStable < tempNb){
                     nbStable = tempNb;
@@ -491,7 +409,7 @@ public class Graphe {
         ArrayList<Integer> stable = new ArrayList<>();
         stable.add(sommet);
         int valid = 0;     
-        for(int j = sommet+1 ; j < gComplem.matrice.length; j++){
+        for(int j = sommet+1 ; j < gComplem.ordre(); j++){
             for(int i = 0; i < stable.size(); i++){
                 if (gComplem.verifSuccesseur(stable.get(i), j) && gComplem.verifSuccesseur(j, stable.get(i)) && !(stable.contains(j))){
                     valid++;
@@ -593,9 +511,8 @@ public class Graphe {
     public boolean relies(int sommet1, int sommet2) {
         return (this.verifSuccesseur(sommet1, sommet2) && this.verifSuccesseur(sommet2, sommet1));
     }
-
-    public ArrayList couleursRelies(int sommet,int[][] dtable){
-        ArrayList couleurs = new ArrayList<>();
+    public ArrayList<Integer> couleursRelies(int sommet,int[][] dtable){
+        ArrayList<Integer> couleurs = new ArrayList<>();
         for(int i = 0; i < dtable.length; i++){
            if(this.relies(sommet, i) && dtable[i][1]!=0 && !(couleurs.contains(dtable[i][1])) ){
                 couleurs.add(dtable[i][1]); 
@@ -603,8 +520,8 @@ public class Graphe {
         }
         return couleurs;
     }
-    public ArrayList couleursRelies(int sommet,int[] dtable){
-        ArrayList couleurs = new ArrayList<>();
+    public ArrayList<Integer> couleursRelies(int sommet,int[] dtable){
+        ArrayList<Integer> couleurs = new ArrayList<>();
         for(int i = 0; i < dtable.length; i++){
            if(this.relies(sommet, i) && dtable[i]!=0 && !(couleurs.contains(dtable[i])) ){
                 couleurs.add(dtable[i]); 
@@ -612,11 +529,12 @@ public class Graphe {
         }
         return couleurs;
     }
-    public int dsatNbColoration(int[][] dTable){
+    public int maxDsat(){
         int dsatNb = 0;
         int tempNb;
-        for (int[] dTable1 : dTable) {
-            tempNb = dTable1[1];
+        int[][] dTable = this.dsat();
+        for (int[] i : dTable) {
+            tempNb = i[1];
             if(tempNb > dsatNb){
                 dsatNb = tempNb;
             }

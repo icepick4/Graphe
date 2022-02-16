@@ -15,7 +15,7 @@ public class GrapheApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int [][] matrice = {
+        int [][] tab = {
                            {0,1,1,1,0,0},
                            {1,0,1,1,0,0},
                            {1,1,0,1,1,1},
@@ -23,6 +23,7 @@ public class GrapheApp {
                            {0,0,1,1,0,1},
                            {0,0,1,0,1,0}
                           };
+        Matrice matrice = new Matrice(tab);
         int [][] matriceStabExemple = {
                             {0,1,0,1,0,0},
                             {1,0,1,0,1,0},
@@ -31,7 +32,7 @@ public class GrapheApp {
                             {0,1,0,0,0,1},
                             {0,0,1,0,1,0}
                            };
-        int [][] matriceDsatExemple = {
+        int [][] tab1  = {
                             {0,1,1,1,1,0,0,0},
                             {1,0,1,1,0,1,0,0},
                             {1,1,0,0,0,0,0,0},
@@ -41,12 +42,13 @@ public class GrapheApp {
                             {0,0,0,0,1,1,0,1},
                             {0,0,0,0,1,1,1,0},
                             };
+        Matrice matriceDsatExemple = new Matrice(tab1);
         int [][] matrice1 = {
                             {0,0,1},
                             {0,0,1},
                             {1,1,0}
                             };
-        int [][] matrice2 = {
+        int [][] tab2 = {
                            {0,1,0,0,0,1},
                            {1,0,1,0,0,0},
                            {0,1,0,1,0,0},
@@ -54,22 +56,27 @@ public class GrapheApp {
                            {0,0,0,1,0,1},
                            {1,0,0,0,1,0}
                           };
+        Matrice matrice2 = new Matrice(tab2);
         int [][] matriceColoration = {
             {0,1,1,0},
             {1,0,1,0},
             {1,1,0,1},
             {0,0,1,0}
         };
-        Graphe graphe1 = new Graphe(matriceDsatExemple);
-        graphe1.WelshPowell();
+        Graphe graphe1 = new Graphe(matrice2);
+        afficherListe(graphe1.welshPowell());
+        System.out.println(graphe1.maxWelshPowell());
+        
+        System.out.println(Arrays.deepToString(graphe1.dsat()));
+        System.out.println(graphe1.maxDsat());
         // System.out.println(Arrays.deepToString(graphe1.matrice));
         // System.out.println(graphe1.estComplet());
         // System.out.println(Arrays.deepToString(graphe1.versComplet().matrice));
         // System.out.println(graphe1.versComplet().estComplet());
-        // System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
+        //System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
         // System.out.println(graphe1.versComplet().estComplet());
         // System.out.print(graphe1.degMax());
-        //System.out.println(Arrays.deepToString(graphe1.dsat()));
+        
         //System.out.println(graphe1.dsatNbColoration(graphe1.dsat()));
         /*afficherListe(graphe1.degre(2));
         afficherListe(graphe1.suivants(0));
