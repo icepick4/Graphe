@@ -5,6 +5,8 @@
 package graphe;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 /**
  *
  * @author Remi
@@ -269,25 +271,24 @@ public class Graphe {
         }
         return Sommets;
     }
-    public int[][] trier( int tab_arg[][], int nb_case )
-{
-     int i, j; 
-     int[] tmp;
+    public int[][] trier( int tab_arg[][], int nb_case ){
+        int i, j; 
+        int[] tmp;
 
-     for(i=0; i<=nb_case-2; i++) /* nombre de remontée des bulles */
-     {
-         for(j=0; j<nb_case-1-i; j++) /* les cases dans ]nb_case-1-i;nb_case-1] sont triées */
-         {
-              if(tab_arg[j][0] < tab_arg[j+1][0])
-              {
-                  tmp = tab_arg[j+1];
-                  tab_arg[j+1] = tab_arg[j];
-                  tab_arg[j] = tmp;
-              }
-         }
-     }
-     return tab_arg;
-}
+        for(i=0; i<=nb_case-2; i++) /* nombre de remontée des bulles */
+        {
+            for(j=0; j<nb_case-1-i; j++) /* les cases dans ]nb_case-1-i;nb_case-1] sont triées */
+            {
+                if(tab_arg[j][0] < tab_arg[j+1][0])
+                {
+                    tmp = tab_arg[j+1];
+                    tab_arg[j+1] = tab_arg[j];
+                    tab_arg[j] = tmp;
+                }
+            }
+        }
+        return tab_arg;
+    }
     public static void afficherListe(int[] tab){
         System.out.print("[");
         for(int i = 0; i < tab.length; i++){
@@ -331,6 +332,18 @@ public class Graphe {
             for(int j = 0 ; j < gComplet.ordre() ; j++){
                 if( i != j){
                     gComplet.matrice.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                } 
+            }
+        }
+        return gComplet;
+    }
+    public Graphe versComplet(int coeff){
+        int[][] matComp = new int [coeff][coeff];
+        Graphe gComplet = new Graphe(matComp);
+        for(int i = 0 ; i < gComplet.matrice.length;i++){
+            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+                if( i != j){
+                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
                 } 
             }
         }
@@ -527,5 +540,5 @@ public class Graphe {
             }
         }
         return dsatNb;
-    }
+    }    
 }
