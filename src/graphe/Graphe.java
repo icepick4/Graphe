@@ -4,6 +4,8 @@
  */
 package graphe;
 import java.util.Arrays;
+import java.net.ContentHandler;
+import java.util.ArrayList;
 /**
  *
  * @author Remi
@@ -11,7 +13,7 @@ import java.util.Arrays;
 public class Graphe {
     private int sommets;
     private int arretes;
-    private int[][] matrice = new int [sommets][sommets];
+    public int[][] matrice = new int [sommets][sommets];
     
     Graphe(int [][] matrice){
         this.matrice = matrice;
@@ -376,7 +378,7 @@ public class Graphe {
     public Graphe versComplementaire(){
         int[][] matComplem = new int [this.sommets][this.sommets];
         Graphe gComplem = new Graphe(matComplem);
-        gComplem = this.sousMat(this.versComplet());
+        gComplem = this.versComplet().sousMat(this);
         return gComplem;
     }
 
@@ -451,35 +453,176 @@ public class Graphe {
             return -1;
         }
         int nbClique= 0;
-        int[] tempClique = new int[this.sommets];
+        int tempNb = 0;
             for (int i=0; i<this.matrice.length;i++) {
-                tempClique = this.clique(i);
-                int j=0;
-                while (tempClique[j]!=-1) {
-                    j++;
-                }
-                if (nbClique < j){
-                    nbClique= j;
+                tempNb = this.clique(i).size();
+                if (nbClique < tempNb){
+                    nbClique = tempNb;
                 }
             }
         return nbClique;
     }
-    public int[] clique(int sommet){
-        int[] clique = new int[this.sommets];
-        Arrays.fill(clique,-1);
-        int indexC = 0;
-        clique[0] = sommet;
-        indexC++;
-        do{
-            for(int i=sommet;i<this.matrice.length;i++){
-                for(int j =0;j<clique.length;j++){
-                    if(clique[j]!=-1 && i!=sommet && verifSuccesseur(clique[j],i) && verifSuccesseur(i,clique[j])){
-                        clique[indexC]=i;
-                        indexC++;
-                    }
+    public ArrayList<Integer> clique(int sommet){
+        ArrayList<Integer> clique = new ArrayList<>();
+        clique.add(sommet);
+        int valid = 0;     
+        for(int j = sommet+1 ; j < this.matrice.length; j++){
+            for(int i = 0; i < clique.size(); i++){
+                if (this.verifSuccesseur(clique.get(i), j) && this.verifSuccesseur(j, clique.get(i)) && !(clique.contains(j))){
+                    valid++;
                 }
             }
-        }while(clique[indexC] != -1);   
+            if(valid == clique.size()){
+                clique.add(j);
+            }
+            valid = 0;
+        }
+        System.out.println(clique);
         return clique;
+    }
+    public int nbStable(){
+        if (!this.estSimple()){
+            System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
+            return -1;
+        }
+        int nbStable= 0;
+        int tempNb = 0;
+            for (int i=0; i<this.matrice.length;i++) {
+                tempNb = this.stable(i).size();
+                if (nbStable < tempNb){
+                    nbStable = tempNb;
+                }
+            }
+        return nbStable;
+    }
+    public ArrayList<Integer> stable(int sommet){
+        int[][] matComplem = new int [this.sommets][this.sommets];
+        Graphe gComplem = new Graphe(matComplem);
+        gComplem = this.versComplementaire();
+        ArrayList<Integer> stable = new ArrayList<>();
+        stable.add(sommet);
+        int valid = 0;     
+        for(int j = sommet+1 ; j < gComplem.matrice.length; j++){
+            for(int i = 0; i < stable.size(); i++){
+                if (gComplem.verifSuccesseur(stable.get(i), j) && gComplem.verifSuccesseur(j, stable.get(i)) && !(stable.contains(j))){
+                    valid++;
+                }
+            }
+            if(valid == stable.size()){
+                stable.add(j);
+            }
+            valid = 0;
+        }
+        System.out.println(stable);
+        return stable;
+    }
+    public int[][] dsat(){
+        int[][] dsatTable = new int[this.sommets][3];
+        dsatTable = this.initDsat();
+        // System.out.println(Arrays.deepToString(dsatTable));
+        int dsatMax = dsatMax(dsatTable);
+        while(listeNonRempli(dsatTable)){
+            for(int i=0; i<dsatTable.length; i++){
+                if (dsatTable[i][2]==dsatMax && dsatTable[i][1]==0){
+                    setColor(i,dsatTable);
+                    // System.out.println("couleur set : "+Arrays.deepToString(dsatTable));
+                    actuDsat(i, dsatTable);
+                    // System.out.println("dsat actu : "+Arrays.deepToString(dsatTable));
+                    dsatMax=dsatMax(dsatTable);
+                    break;
+                }
+            }
+        }
+        // System.out.println("DsatProcess ended successfully");
+        return dsatTable;
+    }
+    public int[][] initDsat(){
+        int[][] dsatTable = new int[this.sommets][3];
+        for(int i=0; i<dsatTable.length; i++){
+            dsatTable[i][0] = i;
+            dsatTable[i][1] = 0;
+            dsatTable[i][2] = this.degre(i)[0];
+        }
+        return dsatTable;
+    }
+    public int degMax(){
+        int degMax = 0;
+        int tempDeg;
+        for(int i = 0; i < this.sommets; i++){
+            tempDeg = this.degre(i)[0];
+            if(tempDeg > degMax){
+                degMax = tempDeg;
+            }
+        }
+        return degMax;
+    }
+    public int dsatMax(int[][] dTable){
+        int dsatMax = 0;
+        int tempDeg;
+        for(int i = 0; i < dTable.length; i++){
+            tempDeg = dTable[i][2];
+            if(tempDeg > dsatMax){
+                dsatMax = tempDeg;
+            }
+        }
+        return dsatMax;
+    }
+    public boolean listeNonRempli(int[][] tab){
+        for(int i = 0; i < tab.length; i++){
+            if (tab[i][1] == 0){
+                return true;
+            }
+        }
+        return false;
+    }
+    public void setColor(int sommet, int[][] dtable){
+        ArrayList couleursRelies = new ArrayList();
+        couleursRelies = couleursRelies(sommet, dtable);
+        for(int couleur = 1; couleur < dtable.length; couleur++){
+            if(!(couleursRelies.contains(couleur))){
+                dtable[sommet][1]=couleur;
+                break;
+            }
+        }
+        
+        // System.out.println("couleur set successfull");
+    }
+    public void actuDsat(int sommet,int[][] dtable){
+        dtable[sommet][2]= -1;
+        ArrayList comCouleurs = new ArrayList<>();
+        boolean actu = false;
+        for (int i = 0; i < dtable.length; i++){
+            comCouleurs = couleursRelies(i, dtable);
+            // System.out.println(i+" : "+comCouleurs);
+
+            if(dtable[i][2]!= -1 && comCouleurs.size()>0){
+                dtable[i][2] = comCouleurs.size();
+            }
+        }
+        
+            // System.out.println("Actualisation dsat de "+i+" à : "+dtable[i][2]);
+    }
+    public boolean relies(int sommet1, int sommet2) {
+        return (this.verifSuccesseur(sommet1, sommet2) && this.verifSuccesseur(sommet2, sommet1));
+    }
+    public ArrayList couleursRelies(int sommet,int[][] dtable){
+        ArrayList couleurs = new ArrayList<>();
+        for(int i = 0; i < dtable.length; i++){
+           if(this.relies(sommet, i) && dtable[i][1]!=0 && !(couleurs.contains(dtable[i][1])) ){
+                couleurs.add(dtable[i][1]); 
+            }
+        }
+        return couleurs;
+    }
+    public int dsatNbColoration(int[][] dTable){
+        int dsatNb = 0;
+        int tempNb;
+        for(int i = 0; i < dTable.length; i++){
+            tempNb = dTable[i][1];
+            if(tempNb > dsatNb){
+                dsatNb = tempNb;
+            }
+        }
+        return dsatNb;
     }
 }
