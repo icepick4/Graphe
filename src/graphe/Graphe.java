@@ -242,50 +242,48 @@ public class Graphe {
                 "\nSomme des degrés : "+this.sommeDegre()+"\nType du graphe : "+this.type();
     }
     
-    public void WelshPowell(){
+    public int WelshPowell(){
         if(!(this.estSymetrique()) || !(this.estSimple())){
             //return "Ce graphe est orienté ou non simple";
         }
         int[] SommetsColores = new int[this.sommets];
-        int[][] NonColores = new int[this.sommets][2];
-        for(int i = 0; i < this.sommets; i++){
-            NonColores[i][0] = this.degre(i)[0];
-            NonColores[i][1] = i;
-        }
-        NonColores = trier(NonColores,NonColores.length);
-        int [] SommetsNonColores;
-        SommetsNonColores = new int[this.sommets];
-        for(int i = 0; i < this.sommets; i++){
-            SommetsNonColores[i] = NonColores[i][1];
-        }
+        int[] Sommets = initWelshPowell();
         int ctr = 1;
         int couleur;
         while (listeNonRempli(SommetsColores)) {
-            couleur = ctr;            
-            SommetsColores[SommetsNonColores[ctr-1]] = couleur;          
-            int cpt = 0;
-            for (int i : SommetsNonColores) {
+            couleur = ctr;     
+            for (int i : Sommets) {
                 if(SommetsColores[i] == 0){
-                    for (int j = 0; j < SommetsColores.length; j++) {
-                        if(SommetsColores[j] == couleur && !(valeurVerif(this.suivants(i),j))){
-                            cpt++;
-                        }
-                    }
-                    if (cpt == nombreOccurences(SommetsColores, couleur)){
-                        SommetsColores[i] = couleur; 
-                    }
+                    ArrayList <Integer> tab;
+                    tab = this.couleursRelies(i, SommetsColores);
+                    if(!(tab.contains(couleur))){ 
+                        SommetsColores[i] = couleur;
+                    } 
                 }
             }
             ctr+=1;
         }
-        afficherListe(SommetsColores);
         int max = 0;
         for(int i = 0; i < SommetsColores.length; i++){
             if(max < SommetsColores[i]){
                 max = SommetsColores[i];
             }
         }
-        System.out.println("On a trouvé une "+max+"-coloration");
+        return max;
+    }
+    public int[] initWelshPowell(){
+        int[][] NonColores = new int[this.sommets][2];
+        for(int i = 0; i < this.sommets; i++){
+            NonColores[i][0] = this.degre(i)[0];
+            NonColores[i][1] = i;
+        }
+        NonColores = trier(NonColores,NonColores.length);
+        int [] Sommets;
+        Sommets = new int[this.sommets];
+        for(int i = 0; i < this.sommets; i++){
+            Sommets[i] = NonColores[i][1];
+        }
+        return Sommets;
     }
     public int[][] trier( int tab_arg[][], int nb_case )
 {
@@ -587,6 +585,15 @@ public class Graphe {
         for(int i = 0; i < dtable.length; i++){
            if(this.relies(sommet, i) && dtable[i][1]!=0 && !(couleurs.contains(dtable[i][1])) ){
                 couleurs.add(dtable[i][1]); 
+            }
+        }
+        return couleurs;
+    }
+    public ArrayList couleursRelies(int sommet,int[] dtable){
+        ArrayList couleurs = new ArrayList<>();
+        for(int i = 0; i < dtable.length; i++){
+           if(this.relies(sommet, i) && dtable[i]!=0 && !(couleurs.contains(dtable[i])) ){
+                couleurs.add(dtable[i]); 
             }
         }
         return couleurs;

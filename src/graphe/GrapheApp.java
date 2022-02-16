@@ -60,7 +60,7 @@ public class GrapheApp {
             {1,1,0,1},
             {0,0,1,0}
         };
-        Graphe graphe1 = new Graphe(matrice2);
+        Graphe graphe1 = new Graphe(matriceDsatExemple);
         graphe1.WelshPowell();
         // System.out.println(Arrays.deepToString(graphe1.matrice));
         // System.out.println(graphe1.estComplet());
