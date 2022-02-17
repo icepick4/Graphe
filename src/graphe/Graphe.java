@@ -338,12 +338,12 @@ public class Graphe {
         return gComplet;
     }
     public Graphe versComplet(int coeff){
-        int[][] matComp = new int [coeff][coeff];
+        Matrice matComp = new Matrice(new int [coeff][coeff]);
         Graphe gComplet = new Graphe(matComp);
-        for(int i = 0 ; i < gComplet.matrice.length;i++){
-            for(int j = 0 ; j < gComplet.matrice.length ; j++){
+        for(int i = 0 ; i < gComplet.ordre();i++){
+            for(int j = 0 ; j < gComplet.ordre() ; j++){
                 if( i != j){
-                    gComplet.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                    gComplet.matrice.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
                 } 
             }
         }
