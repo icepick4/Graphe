@@ -40,7 +40,7 @@ public class Graphe{
     public String type(){
         int p = this.pGraphe();
         String check = "";
-        if(!(this.estSymetrique())){
+        if(!(this.mat.estSymetrique())){
             check = "non-";
         }
         if (this.estSimple()){
@@ -87,7 +87,7 @@ public class Graphe{
      */
     public int[] degre(int sommet){
         int checkOriente;
-        if (this.estSymetrique()){
+        if (this.mat.estSymetrique()){
             checkOriente = 1;
         } 
         else{
@@ -122,7 +122,7 @@ public class Graphe{
      */
     public int[] suivants(int sommet){
         int checkOriente;
-        if (this.estSymetrique()){
+        if (this.mat.estSymetrique()){
             checkOriente = 0;
         } 
         else{
@@ -145,7 +145,7 @@ public class Graphe{
      */
     public int[] precedents(int sommet){
         int checkOriente;
-        if (this.estSymetrique()){
+        if (this.mat.estSymetrique()){
             checkOriente = 0;
         } 
         else{
@@ -212,7 +212,7 @@ public class Graphe{
     }
     
     public int[] welshPowell(){
-        if(!(this.estSymetrique()) || !(this.estSimple())){
+        if(!(this.mat.estSymetrique()) || !(this.estSimple())){
             //return "Ce graphe est orienté ou non simple";
         }
         int[] SommetsColores = new int[this.sommets];
@@ -540,5 +540,34 @@ public class Graphe{
         }
         System.out.println();
         
+    }
+    
+    public boolean estVide(){
+        for (int[] graphe : this.mat.matrice) {
+            for (int j = 0; j < this.ordre(); j++) {
+                if (graphe[j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * 
+     * @param sommet1
+     * @param sommet2
+     * @return la longueur du chemin le plus court entre deux sommets, 0 s'il y en a pas.
+     */
+    public int existeChemin(int sommet1, int sommet2){
+        if (this.estVide()){
+            return 0;
+        }
+        for(int i = 1; i < this.ordre()-1; i++){
+            Matrice matrice = this.mat.powMat(i);
+            if (matrice.matrice[sommet1][sommet2] != 0){
+                return i;
+            }
+        }
+        return 0;
     }
 }
