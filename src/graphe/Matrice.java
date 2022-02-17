@@ -55,9 +55,9 @@ public class Matrice {
     public Matrice multMat(int coeff){
         int[][] matTemp = new int [this.lignes][this.colonnes];
         Matrice gMult = new Matrice(matTemp);
-        for (int[] i : gMult.matrice) {
+        for (int i = 0; i < gMult.matrice.length; i++) {
             for (int j = 0; j< gMult.matrice[0].length; j++) {
-                i[j] *= coeff;
+                gMult.matrice[i][j] *= coeff;
             }
         }
         return gMult;
