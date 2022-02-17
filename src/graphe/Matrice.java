@@ -48,8 +48,8 @@ public class Matrice {
         return result;
     }
     /**
-     * A REVOIR
-     * @param coeff
+     * 
+     * @param coeff multiplicateur
      * @return 
      */
     public Matrice multMat(int coeff){
@@ -128,7 +128,6 @@ public class Matrice {
         return matSoustrait;
     }
     public void afficher(){
-        
         for(int i = 0; i < this.lignes(); i++){
             System.out.println(Arrays.toString(this.matrice[i]));
         }
@@ -137,6 +136,20 @@ public class Matrice {
     }
     public boolean estCarre(){
         return this.lignes == this.colonnes;
+    }
+    
+    public boolean estSymetrique(){
+        if(!(this.estCarre())){
+            return false;
+        }
+        for(int i = 0; i < this.lignes(); i++){
+            for(int j = 0 ; j < this.colonnes(); j++){
+                if (this.matrice[i][j] != this.matrice[j][i]){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
 }
