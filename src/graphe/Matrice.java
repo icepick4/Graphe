@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package graphe;
-
+import java.util.Arrays;
 /**
  *
  * @author Rémi
@@ -16,6 +16,12 @@ public class Matrice {
         this.matrice = matrice;
         this.colonnes = matrice[0].length;
         this.lignes = matrice.length;
+        int max = this.colonnes;
+        for(int i = 0; i < this.lignes; i++){ 
+            if(matrice[i].length > max || matrice[i].length < max){
+                throw new IllegalArgumentException("Matrice non valide");
+            }
+        }
     }
     
     public int colonnes(){
@@ -23,11 +29,7 @@ public class Matrice {
     }
     public int lignes(){
         return this.lignes;
-    }
-    public int[][] matrice(){
-        return matrice;
     }    
-    
     
     /**
      * 
@@ -45,13 +47,17 @@ public class Matrice {
         }
         return result;
     }
-    
+    /**
+     * A REVOIR
+     * @param coeff
+     * @return 
+     */
     public Matrice multMat(int coeff){
         int[][] matTemp = new int [this.lignes][this.colonnes];
         Matrice gMult = new Matrice(matTemp);
-        for (int[] matrice1 : gMult.matrice) {
+        for (int[] i : gMult.matrice) {
             for (int j = 0; j< gMult.matrice[0].length; j++) {
-                matrice1[j] *= coeff;
+                i[j] *= coeff;
             }
         }
         return gMult;
@@ -94,6 +100,14 @@ public class Matrice {
             }
         }
         return matSoustrait;
+    }
+    public void afficher(){
+        
+        for(int i = 0; i < this.lignes(); i++){
+            System.out.println(Arrays.toString(this.matrice[i]));
+        }
+        System.out.println();
+        
     }
     
 }
