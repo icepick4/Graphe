@@ -67,7 +67,7 @@ public class Matrice {
         if (this.colonnes() != mat.lignes()){
             return null;
         }
-        int[][] matTemp = new int [this.lignes()][mat.colonnes];
+        int[][] matTemp = new int [this.lignes][mat.colonnes];
         Matrice matMult = new Matrice(matTemp);
         for(int i = 0 ; i < matMult.lignes();i++){
             for(int j=  0 ; j< matMult.colonnes();j++){
@@ -76,11 +76,23 @@ public class Matrice {
         }
         return matMult;
     }
+    public Matrice powMat(int n){
+        if (!estCarre()){
+            return null;
+        }
+        int ctr = n;
+        Matrice matMult = new Matrice(this.matrice);
+        while(ctr != 1){
+            matMult = matMult.multMat(this);
+            ctr--;
+        }
+        return matMult;
+    }
     public Matrice selfMultMat(){
         if (!estCarre()){
             return null;
         }
-        int[][] matTemp = new int [this.lignes()][this.colonnes];
+        int[][] matTemp = new int [this.lignes][this.colonnes];
         Matrice matMult = new Matrice(matTemp);
         for(int i = 0 ; i < matMult.lignes();i++){
             for(int j=  0 ; j< matMult.colonnes();j++){
