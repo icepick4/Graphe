@@ -35,8 +35,9 @@ public class GrapheApp {
                             {1,0,1,1,0,1,0,0},
                             {1,1,0,0,0,0,0,0},
                             {1,1,0,0,0,0,0,0},
-                            {1,0,0,0,0,0,1,1},
-                            {0,1,0,0,0,0,1,1},
+                            {1,0,0,0,0,1,1,1},
+                            {0,1,0,0,0,1,1,1},
+                            {0,0,0,0,1,1,1,1},
                             {0,0,0,0,1,1,0,1}
                             };
         int [][] tab = {
@@ -60,23 +61,26 @@ public class GrapheApp {
             {0,1,1,0,0},
             {0,0,1,0,1},
             {0,0,0,1,1},
-            {0,1,0,0,1},
-            {1,0,0,0,0}
+            {0,1,1,0,1},
+            {1,1,1,0,0}
         };
         int [][] matriceMultiplication2 = {
-            {1,0},
-            {3,-1}
+            {1,1,1},
+            {1,1,1},
+            {1,1,1}
         };
-        Matrice matrice = new Matrice(matriceMultiplication);
-        // Matrice matrice2 = new Matrice(matriceMultiplication);
-        Matrice matrice2 = matrice.selfMultMat();
-        Matrice matrice3 = matrice.powMat(3);
-        Graphe graphe = new Graphe(matrice);
-        System.out.println(graphe.existeChemin(1,1, 4));
-        System.out.println(graphe.cheminMinim(0, 3));
-        //matrice.afficher();
-        //matrice2.afficher();
-        //matrice3.afficher();
+        Matrice matrice = new Matrice(tab1);
+        Matrice matrice2 = new Matrice(matriceMultiplication2);
+        Graphe g1 = new Graphe(matrice);
+        Graphe g2 = new Graphe(matrice2);
+        System.out.println(g1.contient(g1));
+        System.out.println(g1.contient(g2));
+        System.out.println(g2.contient(g1));
+        // Matrice matrice2 = matrice.selfMultMat();
+        // Matrice matrice3 = matrice.powMat(3);
+        // matrice.afficher();
+        // matrice2.afficher();
+        // matrice3.afficher();
         
         
     }

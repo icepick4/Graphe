@@ -5,6 +5,8 @@
 package graphe;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.swing.text.TabExpander;
 /**
  *
  * @author Remi
@@ -350,7 +352,7 @@ public class Graphe{
 
     public int nbClique(){
         if (!this.estSimple()){
-            System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
+            // System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
             return -1;
         }
         int nbClique= 0;
@@ -378,7 +380,7 @@ public class Graphe{
             }
             valid = 0;
         }
-        System.out.println(clique);
+        // System.out.println(clique);
         return clique;
     }
     public int nbStable(){
@@ -568,5 +570,41 @@ public class Graphe{
         Matrice matrice = this.mat.powMat(longueur);
         Graphe graphe = new Graphe(matrice);
         return graphe.relies(sommet1, sommet2);
+    }
+
+    public boolean contient(Graphe gTested){
+        if ((gTested.estComplet() && this.nbClique() == gTested.ordre()) || (gTested == this)){
+            return true;
+        }
+        // int ctr = 0;
+        if(this.ordre()>=gTested.ordre()){
+            // System.out.println("this sup to gTested");
+            for (int i = 0; i < this.ordre()-gTested.ordre()+1;i++){
+                for(int j = 0; j < this.ordre()-gTested.ordre()+1;j++){
+                    // ctr++;
+                    // System.out.println("ctr :"+ ctr);
+                    // Graphe gExt = this.extractGraphe(i, j ,gTested.ordre());
+                    // gExt.mat.afficher();
+                    // System.out.println(Arrays.deepToString(gExt.mat.matrice)+" -> "+Arrays.deepToString(gTested.mat.matrice));
+                    if(Arrays.deepEquals(this.extractGraphe(i, j ,gTested.ordre()).mat.matrice,gTested.mat.matrice)){
+                        return true;
+                    } 
+                }
+            }
+        }
+        
+        return false;
+    }
+    public Graphe extractGraphe(int posDepX,int posDepY,int size){
+        int[][] tabExtract = new int[size][size];
+        for(int i = 0; i < size; i++){
+            for(int j = 0;j < size; j++){
+                tabExtract[i][j] = this.mat.matrice[i+posDepX][j+posDepY];
+            }
+        };
+        Matrice matExtract = new Matrice(tabExtract);
+        Graphe gExtracted = new Graphe(matExtract);
+        // gExtracted.mat.afficher();
+        return gExtracted;
     }
 }
