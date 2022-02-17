@@ -40,6 +40,16 @@ public class GrapheApp {
                             {0,0,0,0,1,1,1,1},
                             {0,0,0,0,1,1,0,1}
                             };
+        int [][] cube3d  = {
+                            {0,1,1,0,0,0,1,0},
+                            {1,0,0,1,0,0,0,1},
+                            {1,0,0,1,1,0,0,0},
+                            {0,1,1,0,0,1,0,0},
+                            {0,0,1,0,0,1,1,0},
+                            {0,0,0,1,1,0,0,1},
+                            {1,0,0,0,1,0,0,1},
+                            {0,1,0,0,1,1,0,0}
+                            };
         int [][] tab = {
                            {0,1,1,1,0,0},
                            {1,0,1,1,0,0},
@@ -69,18 +79,20 @@ public class GrapheApp {
             {1,1,1},
             {1,1,1}
         };
-        Matrice matrice = new Matrice(tab1);
-        Matrice matrice2 = new Matrice(matriceMultiplication2);
+        Matrice matrice = new Matrice(cube3d);
+        // Matrice matrice2 = new Matrice(matriceMultiplication2);
         Graphe g1 = new Graphe(matrice);
-        Graphe g2 = new Graphe(matrice2);
-        System.out.println(g1.contient(g1));
-        System.out.println(g1.contient(g2));
-        System.out.println(g2.contient(g1));
+        // Graphe g2 = new Graphe(matrice2);
+        // System.out.println(g1.contient(g1));
+        // System.out.println(g1.contient(g2));
+        // System.out.println(g2.contient(g1));
         // Matrice matrice2 = matrice.selfMultMat();
         // Matrice matrice3 = matrice.powMat(3);
         // matrice.afficher();
         // matrice2.afficher();
         // matrice3.afficher();
+        // System.out.println(Graphe.K33.taille());
+        System.out.println(g1.estPlanaire());
         
         
     }

@@ -12,6 +12,14 @@ import javax.swing.text.TabExpander;
  * @author Remi
  */
 public class Graphe{
+    public static final int[][] tabk33 = {{0,0,0,1,1,1},
+                                          {0,0,0,1,1,1},
+                                          {0,0,0,1,1,1},
+                                          {1,1,1,0,0,0},
+                                          {1,1,1,0,0,0},
+                                          {1,1,1,0,0,0}};
+    public static final Matrice k33Mat = new Matrice(tabk33);
+
     private final int sommets;
     private int aretes;
     public Matrice mat;
@@ -25,11 +33,16 @@ public class Graphe{
                 this.aretes+=colonne;
             }
         }
+        if(this.mat.estSymetrique()){
+            this.aretes /= 2;
+        }
         
         if(matrice.lignes() != matrice.colonnes()){
             throw new IllegalArgumentException("Graphe non valide : colonnes!=lignes");
         }
     }
+    
+    public static final Graphe K33 = new Graphe(k33Mat);
     
     public int ordre(){
         return this.sommets;
@@ -332,7 +345,7 @@ public class Graphe{
         }
         return gComplet;
     }
-    public Graphe versComplet(int coeff){
+    public static Graphe versComplet(int coeff){
         Matrice matComp = new Matrice(new int [coeff][coeff]);
         Graphe gComplet = new Graphe(matComp);
         for(int i = 0 ; i < gComplet.ordre();i++){
@@ -572,10 +585,13 @@ public class Graphe{
             for(int j = 0;j < size; j++){
                 tabExtract[i][j] = this.mat.matrice[i+posDepX][j+posDepY];
             }
-        };
+        }
         Matrice matExtract = new Matrice(tabExtract);
         Graphe gExtracted = new Graphe(matExtract);
         // gExtracted.mat.afficher();
         return gExtracted;
+    }
+    public boolean estPlanaire(){
+        return ((this.aretes > 3*this.sommets - 6) && !(this.contient(Graphe.versComplet(5))) && !(this.contient(Graphe.K33)));
     }
 }
