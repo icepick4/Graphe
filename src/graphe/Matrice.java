@@ -62,6 +62,7 @@ public class Matrice {
         }
         return matMult;
     }
+    
     public Matrice multMat(Matrice mat){
         if (this.colonnes() != mat.lignes()){
             return null;
@@ -71,6 +72,19 @@ public class Matrice {
         for(int i = 0 ; i < matMult.lignes();i++){
             for(int j=  0 ; j< matMult.colonnes();j++){
                 matMult.matrice[i][j] = this.multAdd(mat,i,j); //appelle de la méthode de produit vectoriel.
+            }
+        }
+        return matMult;
+    }
+    public Matrice selfMultMat(){
+        if (!estCarre()){
+            return null;
+        }
+        int[][] matTemp = new int [this.lignes()][this.colonnes];
+        Matrice matMult = new Matrice(matTemp);
+        for(int i = 0 ; i < matMult.lignes();i++){
+            for(int j=  0 ; j< matMult.colonnes();j++){
+                matMult.matrice[i][j] = this.multAdd(this,i,j); //appelle de la méthode de produit vectoriel.
             }
         }
         return matMult;
@@ -108,6 +122,9 @@ public class Matrice {
         }
         System.out.println();
         
+    }
+    public boolean estCarre(){
+        return this.lignes == this.colonnes;
     }
     
 }
