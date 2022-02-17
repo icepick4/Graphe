@@ -66,7 +66,7 @@ public class GrapheApp {
         };
         Matrice matrice = new Matrice(matriceMultiplication2);
         Matrice matrice2 = new Matrice(matriceMultiplication);
-        Matrice matrice3 = matrice.multMat(2);
+        Matrice matrice3 = matrice2.multMat(matrice2);
         matrice.afficher();
         matrice2.afficher();
         matrice3.afficher();

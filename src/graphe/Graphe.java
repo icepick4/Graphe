@@ -4,6 +4,7 @@
  */
 package graphe;
 import java.util.ArrayList;
+import java.util.Arrays;
 /**
  *
  * @author Remi
@@ -191,16 +192,7 @@ public class Graphe{
         return false;
     }
 
-    public boolean estSymetrique(){
-        for(int i = 0; i < this.ordre(); i++){
-            for(int j = 0 ; j < this.ordre(); j++){
-                if (this.mat.matrice[i][j] != this.mat.matrice[j][i]){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    
     
     public boolean estComplet(){
         for(int i = 0; i < this.ordre(); i++){
@@ -542,4 +534,11 @@ public class Graphe{
         }
         return dsatNb;
     }    
+    public void afficher(){
+        for(int i = 0; i < this.mat.lignes(); i++){
+            System.out.println(Arrays.toString(this.mat.matrice[i]));
+        }
+        System.out.println();
+        
+    }
 }
