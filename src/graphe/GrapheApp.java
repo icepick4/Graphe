@@ -71,9 +71,12 @@ public class GrapheApp {
         // Matrice matrice2 = new Matrice(matriceMultiplication);
         Matrice matrice2 = matrice.selfMultMat();
         Matrice matrice3 = matrice.powMat(3);
-        matrice.afficher();
-        matrice2.afficher();
-        matrice3.afficher();
+        Graphe graphe = new Graphe(matrice);
+        System.out.println(graphe.existeChemin(1,1, 4));
+        System.out.println(graphe.cheminMinim(0, 3));
+        //matrice.afficher();
+        //matrice2.afficher();
+        //matrice3.afficher();
         
         
     }

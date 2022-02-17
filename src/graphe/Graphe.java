@@ -542,24 +542,15 @@ public class Graphe{
         
     }
     
-    public boolean estVide(){
-        for (int[] graphe : this.mat.matrice) {
-            for (int j = 0; j < this.ordre(); j++) {
-                if (graphe[j] != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    
     /**
      * 
      * @param sommet1
      * @param sommet2
      * @return la longueur du chemin le plus court entre deux sommets, 0 s'il y en a pas.
      */
-    public int existeChemin(int sommet1, int sommet2){
-        if (this.estVide()){
+    public int cheminMinim(int sommet1, int sommet2){
+        if (this.mat.estVide()){
             return 0;
         }
         for(int i = 1; i < this.ordre()-1; i++){
@@ -569,5 +560,13 @@ public class Graphe{
             }
         }
         return 0;
+    }
+    public boolean existeChemin(int longueur,int sommet1, int sommet2){
+        if (this.mat.estVide()){
+            return false;
+        }
+        Matrice matrice = this.mat.powMat(longueur);
+        Graphe graphe = new Graphe(matrice);
+        return graphe.relies(sommet1, sommet2);
     }
 }

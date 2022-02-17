@@ -1,0 +1,23 @@
+/*afficherListe(graphe1.welshPowell());
+        System.out.println(graphe1.maxWelshPowell());
+        
+        System.out.println(Arrays.deepToString(graphe1.dsat()));
+        System.out.println(graphe1.maxDsat());
+        System.out.println(matrice2 == matrice3);*/
+        // System.out.println(Arrays.deepToString(graphe1.matrice));
+        // System.out.println(graphe1.estComplet());
+        // System.out.println(Arrays.deepToString(graphe1.versComplet().matrice));
+        // System.out.println(graphe1.versComplet().estComplet());
+        //System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
+        // System.out.println(graphe1.versComplet().estComplet());
+        // System.out.print(graphe1.degMax());
+        
+        //System.out.println(graphe1.dsatNbColoration(graphe1.dsat()));
+        /*afficherListe(graphe1.degre(2));
+        afficherListe(graphe1.suivants(0));
+        afficherListe(graphe1.precedents(0));
+        afficherListeDegres(graphe1);
+        System.out.println(graphe1); */
+        // afficherListe(graphe1.suivants(0));
+        // afficherListe(graphe1.precedents(0));
+        // System.out.println(graphe1);
