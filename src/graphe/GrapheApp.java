@@ -15,15 +15,13 @@ public class GrapheApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int [][] tab = {
-                           {0,1,1,1,0,0},
-                           {1,0,1,1,0,0},
-                           {1,1,0,1,1,1},
-                           {1,1,1,0,1,0},
-                           {0,0,1,1,0,1},
-                           {0,0,1,0,1,0}
-                          };
-        Matrice matrice = new Matrice(tab);
+        
+        int [][] matriceColoration = {
+            {0,1,1,0},
+            {1,0,1,0},
+            {1,1,0,1},
+            {0,0,1,0}
+        };
         int [][] matriceStabExemple = {
                             {0,1,0,1,0,0},
                             {1,0,1,0,1,0},
@@ -39,15 +37,16 @@ public class GrapheApp {
                             {1,1,0,0,0,0,0,0},
                             {1,0,0,0,0,0,1,1},
                             {0,1,0,0,0,0,1,1},
-                            {0,0,0,0,1,1,0,1},
-                            {0,0,0,0,1,1,1,0},
+                            {0,0,0,0,1,1,0,1}
                             };
-        Matrice matriceDsatExemple = new Matrice(tab1);
-        int [][] matrice1 = {
-                            {0,0,1},
-                            {0,0,1},
-                            {1,1,0}
-                            };
+        int [][] tab = {
+                           {0,1,1,1,0,0},
+                           {1,0,1,1,0,0},
+                           {1,1,0,1,1,1},
+                           {1,1,1,0,1,0},
+                           {0,0,1,1,0,1},
+                           {0,0,1,0,1,0}
+                          };
         int [][] tab2 = {
                            {0,1,0,0,0,1},
                            {1,0,1,0,0,0},
@@ -56,36 +55,23 @@ public class GrapheApp {
                            {0,0,0,1,0,1},
                            {1,0,0,0,1,0}
                           };
-        Matrice matrice2 = new Matrice(tab2);
-        int [][] matriceColoration = {
-            {0,1,1,0},
-            {1,0,1,0},
-            {1,1,0,1},
-            {0,0,1,0}
+        
+        int [][] matriceMultiplication = {
+            {1,2,3},
+            {4,5,6}
         };
-        Graphe graphe1 = new Graphe(matrice2);
-        afficherListe(graphe1.welshPowell());
-        System.out.println(graphe1.maxWelshPowell());
+        int [][] matriceMultiplication2 = {
+            {1,0},
+            {3,-1}
+        };
+        Matrice matrice = new Matrice(matriceMultiplication2);
+        Matrice matrice2 = new Matrice(matriceMultiplication);
+        Matrice matrice3 = matrice.multMat(-2);
+        matrice.afficher();
+        matrice2.afficher();
+        matrice3.afficher();
         
-        System.out.println(Arrays.deepToString(graphe1.dsat()));
-        System.out.println(graphe1.maxDsat());
-        // System.out.println(Arrays.deepToString(graphe1.matrice));
-        // System.out.println(graphe1.estComplet());
-        // System.out.println(Arrays.deepToString(graphe1.versComplet().matrice));
-        // System.out.println(graphe1.versComplet().estComplet());
-        //System.out.println(Arrays.deepToString(graphe1.versComplementaire().matrice));
-        // System.out.println(graphe1.versComplet().estComplet());
-        // System.out.print(graphe1.degMax());
         
-        //System.out.println(graphe1.dsatNbColoration(graphe1.dsat()));
-        /*afficherListe(graphe1.degre(2));
-        afficherListe(graphe1.suivants(0));
-        afficherListe(graphe1.precedents(0));
-        afficherListeDegres(graphe1);
-        System.out.println(graphe1); */
-        // afficherListe(graphe1.suivants(0));
-        // afficherListe(graphe1.precedents(0));
-        // System.out.println(graphe1);
     }
     public static void afficherListe(int[] tab){
         System.out.print("[");

@@ -3,28 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package graphe;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
 /**
  *
  * @author Remi
  */
-public class Graphe {
-    private int sommets;
+public class Graphe{
+    private final int sommets;
     private int aretes;
-    public Matrice matrice;
+    public Matrice mat;
     
     Graphe(Matrice matrice){
-        this.matrice = matrice;
+        this.mat = matrice;
         this.sommets = matrice.lignes();
         this.aretes = 0;
-        for(int[] ligne : this.matrice.matrice){
+        for(int[] ligne : this.mat.matrice){
             for(int colonne : ligne){
                 this.aretes+=colonne;
             }
-        } 
+        }
+        
+        if(matrice.lignes() != matrice.colonnes()){
+            throw new IllegalArgumentException("Graphe non valide : colonnes!=lignes");
+        }
     }
     
     public int ordre(){
@@ -52,7 +53,7 @@ public class Graphe {
     
     public int pGraphe(){
         int max = 0;
-        for (int[] ligne : this.matrice.matrice) {
+        for (int[] ligne : this.mat.matrice) {
             for (int j = 0; j < this.ordre(); j++) {
                 if (ligne[j] > max) {
                     max = ligne[j];
@@ -65,7 +66,7 @@ public class Graphe {
     public boolean estElementaire(){
         for(int i = 0; i < this.ordre(); i++){
             for(int j = 0; j < this.ordre(); j++){
-                if(i == j && this.matrice.matrice[i][j] == 1){
+                if(i == j && this.mat.matrice[i][j] == 1){
                     return false;
                 }
             }
@@ -93,17 +94,17 @@ public class Graphe {
         }
         int[] degres = new int[checkOriente];
         for(int i = 0; i<this.ordre(); i++){
-            if (this.matrice.matrice[sommet][i] != 0){
-                degres[0]+=this.matrice.matrice[sommet][i];
+            if (this.mat.matrice[sommet][i] != 0){
+                degres[0]+=this.mat.matrice[sommet][i];
                 if(degres.length > 1){
-                    degres[1]+=this.matrice.matrice[sommet][i];
+                    degres[1]+=this.mat.matrice[sommet][i];
                 }
                 
             }
-            if (this.matrice.matrice[i][sommet] != 0){
+            if (this.mat.matrice[i][sommet] != 0){
                 if(degres.length > 1){
-                    degres[0]+=this.matrice.matrice[i][sommet];
-                    degres[2]+=this.matrice.matrice[i][sommet];
+                    degres[0]+=this.mat.matrice[i][sommet];
+                    degres[2]+=this.mat.matrice[i][sommet];
                 }
             }
         }
@@ -129,7 +130,7 @@ public class Graphe {
         int[] suivants = new int[this.degre(sommet)[checkOriente]];
         int ctr = 0;
         for(int i = 0; i < this.ordre(); i++){
-            if(this.matrice.matrice[sommet][i] != 0){
+            if(this.mat.matrice[sommet][i] != 0){
                 suivants[ctr] = i;
                 ctr+=1;
             }
@@ -152,7 +153,7 @@ public class Graphe {
         int[] precedents = new int[this.degre(sommet)[checkOriente]];
         int ctr = 0;
         for(int i = 0; i < this.ordre(); i++){
-            if(this.matrice.matrice[i][sommet] != 0){
+            if(this.mat.matrice[i][sommet] != 0){
                 precedents[ctr] = i;
                 ctr+=1;
             }
@@ -193,7 +194,7 @@ public class Graphe {
     public boolean estSymetrique(){
         for(int i = 0; i < this.ordre(); i++){
             for(int j = 0 ; j < this.ordre(); j++){
-                if (this.matrice.matrice[i][j] != this.matrice.matrice[j][i]){
+                if (this.mat.matrice[i][j] != this.mat.matrice[j][i]){
                     return false;
                 }
             }
@@ -204,7 +205,7 @@ public class Graphe {
     public boolean estComplet(){
         for(int i = 0; i < this.ordre(); i++){
             for(int j = 0; j < this.ordre(); j++){
-                if(i != j && this.matrice.matrice[i][j] != 1){
+                if(i != j && this.mat.matrice[i][j] != 1){
                     return false;
                 }
             }
@@ -331,7 +332,7 @@ public class Graphe {
         for(int i = 0 ; i < gComplet.ordre();i++){
             for(int j = 0 ; j < gComplet.ordre() ; j++){
                 if( i != j){
-                    gComplet.matrice.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                    gComplet.mat.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
                 } 
             }
         }
@@ -343,7 +344,7 @@ public class Graphe {
         for(int i = 0 ; i < gComplet.ordre();i++){
             for(int j = 0 ; j < gComplet.ordre() ; j++){
                 if( i != j){
-                    gComplet.matrice.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
+                    gComplet.mat.matrice[i][j] = 1; // on remplit la matrice de 1 sauf pour la diagonale.
                 } 
             }
         }
@@ -351,7 +352,7 @@ public class Graphe {
     }
 
     public Graphe versComplementaire(){
-        Graphe gComplem = new Graphe(this.versComplet().matrice.sousMat(this.matrice));
+        Graphe gComplem = new Graphe(this.versComplet().mat.sousMat(this.mat));
         return gComplem;
     }
 
