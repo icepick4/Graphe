@@ -556,6 +556,35 @@ public class Graphe{
         System.out.println();
         
     }
+    
+    
+    /**
+     * 
+     * @param sommet1
+     * @param sommet2
+     * @return la longueur du chemin le plus court entre deux sommets, 0 s'il y en a pas.
+     */
+    public int cheminMinim(int sommet1, int sommet2){
+        if (this.mat.estVide()){
+            return 0;
+        }
+        for(int i = 1; i < this.ordre()-1; i++){
+            Matrice matrice = this.mat.powMat(i);
+            if (matrice.matrice[sommet1][sommet2] != 0){
+                return i;
+            }
+        }
+        return 0;
+    }
+    public boolean existeChemin(int longueur,int sommet1, int sommet2){
+        if (this.mat.estVide()){
+            return false;
+        }
+        Matrice matrice = this.mat.powMat(longueur);
+        Graphe graphe = new Graphe(matrice);
+        return graphe.relies(sommet1, sommet2);
+    }
+
     public boolean contient(Graphe gTested){
         if ((gTested.estComplet() && this.nbClique() == gTested.ordre()) || (gTested == this)){
             return true;

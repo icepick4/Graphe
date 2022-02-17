@@ -161,4 +161,15 @@ public class Matrice {
         return true;
     }
     
+    public boolean estVide(){
+        for (int i = 0; i < this.lignes(); i++) {
+            for (int j = 0; j < this.colonnes(); j++) {
+                if (this.matrice[i][j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
 }
