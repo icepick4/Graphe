@@ -57,16 +57,20 @@ public class GrapheApp {
                           };
         
         int [][] matriceMultiplication = {
-            {1,2,3},
-            {4,5,6}
+            {0,1,1,0,0},
+            {0,0,1,0,1},
+            {0,0,0,1,1},
+            {0,1,0,0,1},
+            {1,0,0,0,0}
         };
         int [][] matriceMultiplication2 = {
             {1,0},
             {3,-1}
         };
-        Matrice matrice = new Matrice(matriceMultiplication2);
-        Matrice matrice2 = new Matrice(matriceMultiplication);
-        Matrice matrice3 = matrice.multMat(-2);
+        Matrice matrice = new Matrice(matriceMultiplication);
+        // Matrice matrice2 = new Matrice(matriceMultiplication);
+        Matrice matrice2 = matrice.selfMultMat();
+        Matrice matrice3 = matrice.powMat(3);
         matrice.afficher();
         matrice2.afficher();
         matrice3.afficher();
