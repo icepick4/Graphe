@@ -611,7 +611,7 @@ public class Graphe{
         if (this.mat.estVide()){
             return 0;
         }
-        for(int i = 1; i < this.ordre()-1; i++){
+        for(int i = 1; i < this.ordre(); i++){
             Matrice matrice = this.mat.powMat(i);
             if (matrice.matrice[sommet1][sommet2] != 0){
                 return i;
@@ -685,25 +685,56 @@ public class Graphe{
         }
         return encChro;
     }
-
+    public int [][] getCouples(){
+        int[][] sommet = new int[(this.ordre()*(this.ordre()-1)/2)][2];
+        int lignes;
+        int colonnes = 0;
+        if(sommet.length == 1){
+            lignes = 2;
+            colonnes = 2;
+        }
+        else{
+            lignes = sommet.length;
+            int difference = sommet.length - this.ordre();
+            colonnes = sommet.length - difference; 
+        }
+        int ctr = 0;
+        for(int i = 0; i < lignes - 1; i++){
+            for(int j = i+1; j < colonnes; j++){
+                sommet[ctr][1] = j;    
+                sommet[ctr][0] = i;
+                ctr++;
+            }
+        }
+        return sommet;
+    }
     public boolean estConnexe(){
         if(this.mat.estVide() && this.ordre() > 1){
             return false;
         }
-        int[][] sommet = new int[(this.ordre()*(this.ordre()-1)/2)][2];
-        int ctr = 0;
-        for(int i = 0; i < sommet.length - 1; i++){
-            for(int j = i+1; j < sommet.length ; j++){
-                sommet[ctr][1] = j;    
-                sommet[ctr][0] = i;
-                ctr++;
-            }   
-        }
+        int [][] sommet = getCouples();
         for (int[] i : sommet) {
             if (this.cheminMinim(i[0], i[1]) == 0 && this.cheminMinim(i[1], i[0]) == 0) {
                 return false;
             }
         }
         return true;
+    }
+    
+    public int getDiametre(){
+        int max = 0;
+        if(this.mat.estVide()){
+            return max;
+        }
+        int [][]couples = getCouples();
+        for (int[] couple : couples) {
+            if (cheminMinim(couple[0], couple[1]) > max) {
+                max = cheminMinim(couple[0], couple[1]);
+            }
+            if (cheminMinim(couple[1], couple[0]) > max) {
+                max = cheminMinim(couple[1], couple[0]);
+            }
+        }
+        return max;
     }
 }
