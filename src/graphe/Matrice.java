@@ -26,6 +26,7 @@ public class Matrice {
     public int colonnes(){
         return this.colonnes;
     }
+    
     public int lignes(){
         return this.lignes;
     }    
@@ -35,7 +36,7 @@ public class Matrice {
      *fonction du calcul de produit vectoriel à une position donnée de la matrice résultante.
      * 
      * @param mat
-     * @param ligne
+     * @param lignes
      * @param col
      * @return le résultat du produit vectoriel à une position donnée.
      */
@@ -46,6 +47,7 @@ public class Matrice {
         }
         return result;
     }
+
     /**
      * 
      * @param coeff multiplicateur
@@ -75,6 +77,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice powMat(int n){
         if (!estCarre()){
             return null;
@@ -87,6 +90,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice selfMultMat(){
         if (!estCarre()){
             return null;
@@ -100,6 +104,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice addMat(Matrice mat){
         if (this.colonnes() != mat.colonnes() && this.lignes() != mat.lignes()){
             return null;
@@ -113,6 +118,7 @@ public class Matrice {
         }
         return matSoustrait;
     }
+
     public Matrice sousMat(Matrice mat){
         if (this.colonnes() != mat.colonnes() && this.lignes() != mat.lignes()){
             return null;
@@ -126,6 +132,7 @@ public class Matrice {
         }
         return matSoustrait;
     }
+
     public void afficher(){
         for(int i = 0; i < this.lignes(); i++){
             System.out.println(Arrays.toString(this.matrice[i]));
@@ -133,6 +140,7 @@ public class Matrice {
         System.out.println();
         
     }
+
     public boolean estCarre(){
         return this.lignes == this.colonnes;
     }

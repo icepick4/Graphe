@@ -6,19 +6,18 @@ package graphe;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.text.TabExpander;
 /**
  *
  * @author Remi
  */
 public class Graphe{
-    public static final int[][] tabk33 = {{0,0,0,1,1,1},
+    private static final int[][] tabk33 = {{0,0,0,1,1,1},
                                           {0,0,0,1,1,1},
                                           {0,0,0,1,1,1},
                                           {1,1,1,0,0,0},
                                           {1,1,1,0,0,0},
                                           {1,1,1,0,0,0}};
-    public static final Matrice k33Mat = new Matrice(tabk33);
+    private static final Matrice k33Mat = new Matrice(tabk33);
 
     private final int sommets;
     private int aretes;
@@ -42,7 +41,7 @@ public class Graphe{
         }
     }
     
-    public static final Graphe K33 = new Graphe(k33Mat);
+    private static final Graphe K33 = new Graphe(k33Mat);
     
     public int ordre(){
         return this.sommets;
@@ -127,6 +126,39 @@ public class Graphe{
         return degres;
     }
     
+    public void afficherListeDegres(){
+        System.out.print("              Sommet : ");
+        for(int i = 0; i < this.ordre(); i++){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+        for(int i = 0; i < 3; i++){
+            switch (i) {
+                case 0 -> {
+                    System.out.print("               Degré : ");
+                    for(int j = 0; j < this.ordre(); j++){
+                        System.out.print(this.degre(j)[0]+" ");
+                    }
+                    System.out.println();
+                }
+                case 1 -> {
+                    System.out.print("Demi-degré extérieur : ");
+                    for(int j = 0; j < this.ordre(); j++){
+                        System.out.print(this.degre(j)[1]+" ");
+                    }
+                    System.out.println();
+                }
+                default -> {
+                        System.out.print("Demi-degré intérieur : ");
+                        for(int j = 0; j < this.ordre(); j++){
+                                System.out.print(this.degre(j)[2]+" ");
+                                }
+                        System.out.println();
+                }
+            } 
+        }
+    }
+
     public int sommeDegre(){
         return this.aretes*2;
     }
@@ -206,8 +238,6 @@ public class Graphe{
         }
         return false;
     }
-
-    
     
     public boolean estComplet(){
         for(int i = 0; i < this.ordre(); i++){
@@ -227,11 +257,11 @@ public class Graphe{
     }
     
     public int[] welshPowell(){
-        if(!(this.mat.estSymetrique()) || !(this.estSimple())){
-            //return "Ce graphe est orienté ou non simple";
-        }
         int[] SommetsColores = new int[this.sommets];
         int[] Sommets = initWelshPowell();
+        if(!(this.mat.estSymetrique()) || !(this.estSimple())){
+            return SommetsColores;
+        }
         int ctr = 1;
         int couleur;
         while (listeNonRempli(SommetsColores)) {
@@ -256,6 +286,9 @@ public class Graphe{
         return SommetsColores;
     }
     public int maxWelshPowell(){
+        if(this.estComplet()){
+            return this.sommets;
+        }
         int [] SommetsColores = this.welshPowell();
         int max = 0;
         for(int i = 0; i < SommetsColores.length; i++){
@@ -365,7 +398,6 @@ public class Graphe{
 
     public int nbClique(){
         if (!this.estSimple()){
-            // System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
             return -1;
         }
         int nbClique= 0;
@@ -393,12 +425,11 @@ public class Graphe{
             }
             valid = 0;
         }
-        // System.out.println(clique);
         return clique;
     }
     public int nbStable(){
         if (!this.estSimple()){
-            System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
+            // System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
             return -1;
         }
         int nbStable= 0;
@@ -428,27 +459,23 @@ public class Graphe{
             }
             valid = 0;
         }
-        System.out.println(stable);
+        // System.out.println(stable);
         return stable;
     }
     public int[][] dsat(){
         int[][] dsatTable;
         dsatTable = this.initDsat();
-        // System.out.println(Arrays.deepToString(dsatTable));
         int dsatMax = dsatMax(dsatTable);
         while(listeNonRempli(dsatTable)){
             for(int i=0; i<dsatTable.length; i++){
                 if (dsatTable[i][2]==dsatMax && dsatTable[i][1]==0){
                     setColor(i,dsatTable);
-                    // System.out.println("couleur set : "+Arrays.deepToString(dsatTable));
                     actuDsat(i, dsatTable);
-                    // System.out.println("dsat actu : "+Arrays.deepToString(dsatTable));
                     dsatMax=dsatMax(dsatTable);
                     break;
                 }
             }
         }
-        // System.out.println("DsatProcess ended successfully");
         return dsatTable;
     }
     public int[][] initDsat(){
@@ -491,7 +518,7 @@ public class Graphe{
         return false;
     }
     public void setColor(int sommet, int[][] dtable){
-        ArrayList couleursRelies;
+        ArrayList<Integer> couleursRelies;
         couleursRelies = couleursRelies(sommet, dtable);
         for(int couleur = 1; couleur < dtable.length; couleur++){
             if(!(couleursRelies.contains(couleur))){
@@ -504,7 +531,7 @@ public class Graphe{
     }
     public void actuDsat(int sommet,int[][] dtable){
         dtable[sommet][2]= -1;
-        ArrayList comCouleurs;
+        ArrayList<Integer> comCouleurs;
         for (int i = 0; i < dtable.length; i++){
             comCouleurs = couleursRelies(i, dtable);
             // System.out.println(i+" : "+comCouleurs);
@@ -538,6 +565,9 @@ public class Graphe{
         return couleurs;
     }
     public int maxDsat(){
+        if(this.estComplet()){
+            return this.sommets;
+        }
         int dsatNb = 0;
         int tempNb;
         int[][] dTable = this.dsat();
@@ -589,25 +619,18 @@ public class Graphe{
         if ((gTested.estComplet() && this.nbClique() == gTested.ordre()) || (gTested == this)){
             return true;
         }
-        // int ctr = 0;
         if(this.ordre()>=gTested.ordre()){
-            // System.out.println("this sup to gTested");
             for (int i = 0; i < this.ordre()-gTested.ordre()+1;i++){
                 for(int j = 0; j < this.ordre()-gTested.ordre()+1;j++){
-                    // ctr++;
-                    // System.out.println("ctr :"+ ctr);
-                    // Graphe gExt = this.extractGraphe(i, j ,gTested.ordre());
-                    // gExt.mat.afficher();
-                    // System.out.println(Arrays.deepToString(gExt.mat.matrice)+" -> "+Arrays.deepToString(gTested.mat.matrice));
                     if(Arrays.deepEquals(this.extractGraphe(i, j ,gTested.ordre()).mat.matrice,gTested.mat.matrice)){
                         return true;
                     } 
                 }
             }
         }
-        
         return false;
     }
+
     public Graphe extractGraphe(int posDepX,int posDepY,int size){
         int[][] tabExtract = new int[size][size];
         for(int i = 0; i < size; i++){
@@ -619,7 +642,33 @@ public class Graphe{
         Graphe gExtracted = new Graphe(matExtract);
         return gExtracted;
     }
+
     public boolean estPlanaire(){
-        return ((this.aretes > 3*this.sommets - 6) && !(this.contient(Graphe.versComplet(5))) && !(this.contient(Graphe.K33)));
+        return (!(this.aretes > 3*this.sommets - 6) && !(this.contient(Graphe.versComplet(5))) && !(this.contient(Graphe.K33)));
+    }
+
+    public int[] encadrementChromatique(){
+        int[] encChro = new int[2];
+        int nClique = this.nbClique();
+        int nStable = this.nbStable();
+        if(this.estComplet()){
+            encChro[0] = this.sommets;
+            encChro[1] = this.sommets;
+            return encChro;
+        }
+        if(this.estSimple() && this.mat.estSymetrique()){
+            if(nClique > 0){
+                encChro[0] = nClique;
+            }
+            if(nClique<(this.sommets/nStable)){
+                encChro[0] = this.sommets/nStable;
+            }
+            encChro[1]=this.degMax()+1;         
+            if(encChro[1]>4 && this.estPlanaire()){
+                encChro[1] = 4;
+            }
+            
+        }
+        return encChro;
     }
 }
