@@ -77,13 +77,15 @@ public class GrapheApp {
             {1,1,1,0,0}
         };
         int [][] matriceMultiplication2 = {
-            {1,1,1},
-            {1,1,1},
-            {1,1,1}
+            {0,1,1},
+            {1,0,1},
+            {1,1,0}
         };
         Matrice matrice = new Matrice(matriceColoration);
         // Matrice matrice2 = new Matrice(matriceMultiplication2);
         Graphe g1 = new Graphe(matrice);
+        //System.out.println(g1.cheminMinim(2,1));
+        System.out.print(g1.estConnexe());
         // Graphe g2 = new Graphe(matrice2);
         // System.out.println(g1.contient(g1));
         // System.out.println(g1.contient(g2));
