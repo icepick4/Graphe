@@ -337,6 +337,19 @@ public class Graphe{
         }
         System.out.println("]");
     }
+    public static void afficherListe(int[][] tab){
+        System.out.print("[");
+        for(int i = 0; i < tab.length; i++){
+            System.out.print("[");
+            for(int j = 0; j < tab[0].length; j++){
+                System.out.print(tab[i][j]);
+                System.out.print(", ");
+            }
+            System.out.println("]");
+            
+        }
+        System.out.println("]");
+    }
 
     public boolean listeNonRempli(int[] tab){
         for(int i = 0; i < tab.length; i++){
@@ -600,6 +613,7 @@ public class Graphe{
         }
         return 0;
     }
+
     public boolean existeChemin(int longueur,int sommet1, int sommet2){
         if (this.mat.estVide()){
             return false;
@@ -632,6 +646,7 @@ public class Graphe{
         
         return false;
     }
+
     public Graphe extractGraphe(int posDepX,int posDepY,int size){
         int[][] tabExtract = new int[size][size];
         for(int i = 0; i < size; i++){
@@ -644,7 +659,29 @@ public class Graphe{
         // gExtracted.mat.afficher();
         return gExtracted;
     }
+
     public boolean estPlanaire(){
         return ((this.aretes > 3*this.sommets - 6) && !(this.contient(Graphe.versComplet(5))) && !(this.contient(Graphe.K33)));
+    }
+
+    public boolean estConnexe(){
+        if(this.mat.estVide() && this.ordre() > 1){
+            return false;
+        }
+        int[][] sommet = new int[(this.ordre()*(this.ordre()-1)/2)][2];
+        int ctr = 0;
+        for(int i = 0; i < sommet.length - 1; i++){
+            for(int j = i+1; j < sommet.length ; j++){
+                sommet[ctr][1] = j;    
+                sommet[ctr][0] = i;
+                ctr++;
+            }   
+        }
+        for (int[] i : sommet) {
+            if (this.cheminMinim(i[0], i[1]) == 0 && this.cheminMinim(i[1], i[0]) == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
