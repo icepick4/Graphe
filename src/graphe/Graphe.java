@@ -617,7 +617,6 @@ public class Graphe{
         }
         Matrice matExtract = new Matrice(tabExtract);
         Graphe gExtracted = new Graphe(matExtract);
-        // gExtracted.mat.afficher();
         return gExtracted;
     }
     public boolean estPlanaire(){

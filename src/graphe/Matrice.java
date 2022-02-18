@@ -4,8 +4,6 @@
  */
 package graphe;
 import java.util.Arrays;
-
-import javax.swing.text.TabExpander;
 /**
  *
  * @author Rémi
@@ -25,14 +23,6 @@ public class Matrice {
             }
         }
     }
-    // public static int[][]tabk33 = {{0,0,0,1,1,1},
-    //                                 {0,0,0,1,1,1},
-    //                                 {0,0,0,1,1,1},
-    //                                 {1,1,1,0,0,0},
-    //                                 {1,1,1,0,0,0},
-    //                                 {1,1,1,0,0,0}};
-
-    // public static Matrice k33Mat = new Matrice(tabk33);
     public int colonnes(){
         return this.colonnes;
     }
