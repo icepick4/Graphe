@@ -4,8 +4,6 @@
  */
 package graphe;
 import java.util.Arrays;
-
-import javax.swing.text.TabExpander;
 /**
  *
  * @author Rémi
@@ -25,17 +23,11 @@ public class Matrice {
             }
         }
     }
-    // public static int[][]tabk33 = {{0,0,0,1,1,1},
-    //                                 {0,0,0,1,1,1},
-    //                                 {0,0,0,1,1,1},
-    //                                 {1,1,1,0,0,0},
-    //                                 {1,1,1,0,0,0},
-    //                                 {1,1,1,0,0,0}};
 
-    // public static Matrice k33Mat = new Matrice(tabk33);
     public int colonnes(){
         return this.colonnes;
     }
+    
     public int lignes(){
         return this.lignes;
     }    
@@ -56,6 +48,7 @@ public class Matrice {
         }
         return result;
     }
+
     /**
      * 
      * @param coeff multiplicateur
@@ -85,6 +78,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice powMat(int n){
         if (!estCarre()){
             return null;
@@ -97,6 +91,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice selfMultMat(){
         if (!estCarre()){
             return null;
@@ -110,6 +105,7 @@ public class Matrice {
         }
         return matMult;
     }
+
     public Matrice addMat(Matrice mat){
         if (this.colonnes() != mat.colonnes() && this.lignes() != mat.lignes()){
             return null;
@@ -123,6 +119,7 @@ public class Matrice {
         }
         return matSoustrait;
     }
+
     public Matrice sousMat(Matrice mat){
         if (this.colonnes() != mat.colonnes() && this.lignes() != mat.lignes()){
             return null;
@@ -136,6 +133,7 @@ public class Matrice {
         }
         return matSoustrait;
     }
+
     public void afficher(){
         for(int i = 0; i < this.lignes(); i++){
             System.out.println(Arrays.toString(this.matrice[i]));
@@ -143,6 +141,7 @@ public class Matrice {
         System.out.println();
         
     }
+
     public boolean estCarre(){
         return this.lignes == this.colonnes;
     }

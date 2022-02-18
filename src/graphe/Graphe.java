@@ -6,19 +6,18 @@ package graphe;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.text.TabExpander;
 /**
  *
  * @author Remi
  */
 public class Graphe{
-    public static final int[][] tabk33 = {{0,0,0,1,1,1},
+    private static final int[][] tabk33 = {{0,0,0,1,1,1},
                                           {0,0,0,1,1,1},
                                           {0,0,0,1,1,1},
                                           {1,1,1,0,0,0},
                                           {1,1,1,0,0,0},
                                           {1,1,1,0,0,0}};
-    public static final Matrice k33Mat = new Matrice(tabk33);
+    private static final Matrice k33Mat = new Matrice(tabk33);
 
     private final int sommets;
     private int aretes;
@@ -42,7 +41,7 @@ public class Graphe{
         }
     }
     
-    public static final Graphe K33 = new Graphe(k33Mat);
+    private static final Graphe K33 = new Graphe(k33Mat);
     
     public int ordre(){
         return this.sommets;
@@ -127,6 +126,39 @@ public class Graphe{
         return degres;
     }
     
+    public void afficherListeDegres(){
+        System.out.print("              Sommet : ");
+        for(int i = 0; i < this.ordre(); i++){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+        for(int i = 0; i < 3; i++){
+            switch (i) {
+                case 0 -> {
+                    System.out.print("               Degré : ");
+                    for(int j = 0; j < this.ordre(); j++){
+                        System.out.print(this.degre(j)[0]+" ");
+                    }
+                    System.out.println();
+                }
+                case 1 -> {
+                    System.out.print("Demi-degré extérieur : ");
+                    for(int j = 0; j < this.ordre(); j++){
+                        System.out.print(this.degre(j)[1]+" ");
+                    }
+                    System.out.println();
+                }
+                default -> {
+                        System.out.print("Demi-degré intérieur : ");
+                        for(int j = 0; j < this.ordre(); j++){
+                                System.out.print(this.degre(j)[2]+" ");
+                                }
+                        System.out.println();
+                }
+            } 
+        }
+    }
+
     public int sommeDegre(){
         return this.aretes*2;
     }
@@ -206,8 +238,6 @@ public class Graphe{
         }
         return false;
     }
-
-    
     
     public boolean estComplet(){
         for(int i = 0; i < this.ordre(); i++){
@@ -227,11 +257,11 @@ public class Graphe{
     }
     
     public int[] welshPowell(){
-        if(!(this.mat.estSymetrique()) || !(this.estSimple())){
-            //return "Ce graphe est orienté ou non simple";
-        }
         int[] SommetsColores = new int[this.sommets];
         int[] Sommets = initWelshPowell();
+        if(!(this.mat.estSymetrique()) || !(this.estSimple())){
+            return SommetsColores;
+        }
         int ctr = 1;
         int couleur;
         while (listeNonRempli(SommetsColores)) {
@@ -365,7 +395,6 @@ public class Graphe{
 
     public int nbClique(){
         if (!this.estSimple()){
-            // System.err.println("[ERROR] - LE GRAPHE N'EST PAS SIMPLE");
             return -1;
         }
         int nbClique= 0;
@@ -393,7 +422,6 @@ public class Graphe{
             }
             valid = 0;
         }
-        // System.out.println(clique);
         return clique;
     }
     public int nbStable(){
@@ -434,21 +462,17 @@ public class Graphe{
     public int[][] dsat(){
         int[][] dsatTable;
         dsatTable = this.initDsat();
-        // System.out.println(Arrays.deepToString(dsatTable));
         int dsatMax = dsatMax(dsatTable);
         while(listeNonRempli(dsatTable)){
             for(int i=0; i<dsatTable.length; i++){
                 if (dsatTable[i][2]==dsatMax && dsatTable[i][1]==0){
                     setColor(i,dsatTable);
-                    // System.out.println("couleur set : "+Arrays.deepToString(dsatTable));
                     actuDsat(i, dsatTable);
-                    // System.out.println("dsat actu : "+Arrays.deepToString(dsatTable));
                     dsatMax=dsatMax(dsatTable);
                     break;
                 }
             }
         }
-        // System.out.println("DsatProcess ended successfully");
         return dsatTable;
     }
     public int[][] initDsat(){
@@ -491,7 +515,7 @@ public class Graphe{
         return false;
     }
     public void setColor(int sommet, int[][] dtable){
-        ArrayList couleursRelies;
+        ArrayList<Integer> couleursRelies;
         couleursRelies = couleursRelies(sommet, dtable);
         for(int couleur = 1; couleur < dtable.length; couleur++){
             if(!(couleursRelies.contains(couleur))){
@@ -504,7 +528,7 @@ public class Graphe{
     }
     public void actuDsat(int sommet,int[][] dtable){
         dtable[sommet][2]= -1;
-        ArrayList comCouleurs;
+        ArrayList<Integer> comCouleurs;
         for (int i = 0; i < dtable.length; i++){
             comCouleurs = couleursRelies(i, dtable);
             // System.out.println(i+" : "+comCouleurs);
