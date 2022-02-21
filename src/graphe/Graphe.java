@@ -132,7 +132,7 @@ public class Graphe{
             System.out.print(i+" ");
         }
         System.out.println();
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 3;i++){
             switch (i) {
                 case 0 -> {
                     System.out.print("               Degré : ");
@@ -155,7 +155,25 @@ public class Graphe{
                                 }
                         System.out.println();
                 }
-            } 
+            }
+            if (this.mat.estSymetrique()){
+                break;
+            }
+        }
+    }
+    
+    public void afficherListeDegres(int sommet){
+        System.out.print("              Sommet : ");
+        System.out.print(sommet+" ");
+        System.out.println();
+        System.out.print("               Degré : ");
+        System.out.print(this.degre(sommet)[0]+" ");
+        System.out.println();
+        if (!(this.mat.estSymetrique())){
+            System.out.print("Demi-degré extérieur : ");
+            System.out.println(this.degre(sommet)[1]+" ");
+            System.out.print("Demi-degré intérieur : ");
+            System.out.println(this.degre(sommet)[2]+" ");
         }
     }
 
@@ -276,12 +294,6 @@ public class Graphe{
                 }
             }
             ctr+=1;
-        }
-        int max = 0;
-        for(int i = 0; i < SommetsColores.length; i++){
-            if(max < SommetsColores[i]){
-                max = SommetsColores[i];
-            }
         }
         return SommetsColores;
     }
@@ -685,10 +697,11 @@ public class Graphe{
         }
         return encChro;
     }
+    
     public int [][] getCouples(){
         int[][] sommet = new int[(this.ordre()*(this.ordre()-1)/2)][2];
         int lignes;
-        int colonnes = 0;
+        int colonnes;
         if(sommet.length == 1){
             lignes = 2;
             colonnes = 2;
@@ -708,6 +721,7 @@ public class Graphe{
         }
         return sommet;
     }
+    
     public boolean estConnexe(){
         if(this.mat.estVide() && this.ordre() > 1){
             return false;

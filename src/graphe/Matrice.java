@@ -36,7 +36,7 @@ public class Matrice {
      *fonction du calcul de produit vectoriel à une position donnée de la matrice résultante.
      * 
      * @param mat
-     * @param lignes
+     * @param ligne
      * @param col
      * @return le résultat du produit vectoriel à une position donnée.
      */
@@ -145,6 +145,30 @@ public class Matrice {
         return this.lignes == this.colonnes;
     }
     
+    
+    
+    public boolean estVide(){
+        for (int i = 0; i < this.lignes(); i++) {
+            for (int j = 0; j < this.colonnes(); j++) {
+                if (this.matrice[i][j] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean estReflexif(){
+        for(int i = 0; i < this.lignes(); i++){
+            for(int j = 0; j < this.colonnes(); j++){
+                if(i == j && this.matrice[i][j] != 1){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public boolean estSymetrique(){
         if(!(this.estCarre())){
             return false;
@@ -159,15 +183,7 @@ public class Matrice {
         return true;
     }
     
-    public boolean estVide(){
-        for (int i = 0; i < this.lignes(); i++) {
-            for (int j = 0; j < this.colonnes(); j++) {
-                if (this.matrice[i][j] != 0) {
-                    return false;
-                }
-            }
-        }
+    public boolean estTransitif(){
         return true;
     }
-    
 }

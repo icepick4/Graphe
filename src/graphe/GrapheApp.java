@@ -89,13 +89,17 @@ public class GrapheApp {
             {1,1,0,0}
         };
         int [][] matriceMini = {
-            {0,0},
-            {0,0}        
+            {1,1},
+            {1,1}        
         };
-        Matrice matrice = new Matrice(matriceDiametre);
+        Matrice matrice = new Matrice(matriceMultiplication2);
         // Matrice matrice2 = new Matrice(matriceMultiplication2);
+       
+        //System.out.println(matrice.estSymetrique());
         Graphe g1 = new Graphe(matrice);
-        System.out.println(g1.getDiametre());
+        g1.afficherListeDegres(0);
+        g1.afficherListeDegres();
+        //System.out.println(g1.getDiametre());
         //System.out.println(g1.cheminMinim(2,1));
         //System.out.print(g1.estConnexe());
         // Graphe g2 = new Graphe(matrice2);
